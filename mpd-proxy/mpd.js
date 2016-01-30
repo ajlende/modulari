@@ -7,8 +7,6 @@ var net = require('net');
 var http = require('http');
 var WebSocketServer = require('websocket').server;
 
-var seneca = require('seneca');
-
 /**
  * @desc Creates a new MPD Object
  *
@@ -17,7 +15,7 @@ var seneca = require('seneca');
  * @param {string} [mpdPass] - The optional MPD password
  * @class
  */
-function MPD(mpdHost, mpdPort, mpdPass) {
+function mpd(ws, mpdHost, mpdPort, mpdPass) {
   this.netConnection = {};
   this.host = mpdHost;
   this.port = mpdPort;
@@ -25,7 +23,7 @@ function MPD(mpdHost, mpdPort, mpdPass) {
   this.isConnected = false;
   this.isAuthenticated = false;
 
-  this.setupMPD(this.host, this.port, this.pass);
+  this.setupMPD(ws, this.host, this.port, this.pass);
 }
 
 /**
@@ -35,22 +33,26 @@ function MPD(mpdHost, mpdPort, mpdPass) {
  * @param {number} port - the MPD port
  * @param {string} [pass] - an optional password for MPD
  */
-MPD.prototype.setupMPD = function(host, port, pass) {
+mpd.prototype.setupMPD = function (ws, host, port, pass) {
   var self = this;
 
   pass = pass || '';
 
   // The mpd connection
-  self.netConnection = net.connect({host: host, port: port}, function() {
+  self.netConnection = net.connect({
+    host: host,
+    port: port
+  }, function () {
     self.isConnected = true;
   });
 
-  self.netConnection.on('data', function(data) {
+  self.netConnection.on('data', function (data) {
     // The string message that was sent to us
     var msgString = data.toString();
-    console.log((new Date()) + ' MPD at ' + host + ':' + port + ' says ' + msgString.replace(/^\s+|\s+$/g,''));
+    console.log((new Date()) + ' MPD at ' + host + ':' + port + ' says ' + msgString.replace(/^\s+|\s+$/g, ''));
 
-    var ws = seneca.make$('proxy/ws');
+    // var seneca = require('seneca'); /// TODO Check this out
+    // var ws = seneca.make('proxy/ws');
     ws.list$({}, function (err, list) {
       _.forEach(list, function (websocket) {
         // Loop through all clients
@@ -63,11 +65,10 @@ MPD.prototype.setupMPD = function(host, port, pass) {
 
   });
 
-  self.netConnection.on('end', function() {
+  self.netConnection.on('end', function () {
     console.log((new Date()) + ' MPD Connection [' + host + ':' + port + '] Closed');
 
     // Notify the clients that the connection was closed
-    var ws = seneca.make$('proxy/ws');
     ws.list$({}, function (err, list) {
       _.forEach(list, function (websocket) {
         // Loop through all clients
@@ -82,5 +83,4 @@ MPD.prototype.setupMPD = function(host, port, pass) {
   });
 };
 
-
-module.exports = MPD;
+module.exports = mpd;

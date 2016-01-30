@@ -5,15 +5,14 @@ var _ = require('lodash');
 var net = require('net');
 var http = require('http');
 var WebSocketServer = require('websocket').server;
+var mpd = require('./mpd.js');
 
 function mpdProxy(options) {
   var seneca = this;
 
-  var MPD = require('./mpd.js');
-
   var ws = seneca.make('proxy/ws');
 
-  ws.list$(function(err, list) {
+  ws.list$(function (err, list) {
     if (err) console.error(err);
     console.log(list);
     if (list.length === 0) {
@@ -22,7 +21,7 @@ function mpdProxy(options) {
       ws.clients = {};
       ws.clientCount = 0;
       ws.serverActive = false;
-      ws.save$(function(err, ws) {
+      ws.save$(function (err, ws) {
         if (err) console.error(err);
         console.log(ws);
       });
@@ -30,8 +29,8 @@ function mpdProxy(options) {
   });
 
   var mpdConnections = seneca.make('proxy/mpdConnections');
-  mpdConnections.list$({}, function(err, list) {
-    _.forEach(list, function(connection) {
+  mpdConnections.list$({}, function (err, list) {
+    _.forEach(list, function (connection) {
       console.log(connection);
     });
   });
@@ -62,8 +61,8 @@ function mpdProxy(options) {
     var mpdPort = args.port;
     var mpdPass = args.pass;
 
-    ws.list$(function(err, list) {
-      _.forEach(list, function(websocket) {
+    ws.list$(function (err, list) {
+      _.forEach(list, function (websocket) {
         //Check if websocket server is set up.
         if (!websocket.serverActive) {
           setupWS(8007);
@@ -75,20 +74,20 @@ function mpdProxy(options) {
     mpdConnections.list$({
       host: mpdHost,
       port: mpdPort
-    }, function(err, list) {
+    }, function (err, list) {
       if (list.length === 0) {
-        mpdConnections.data$({
-          mpd: new MPD(mpdHost, mpdPort, mpdPass)
-        }).save$();
-        console.log((new Date()) + ' MPD created [' + mpdHost + ':' + mpdPort + ']');
+        ws.list$(function (err, list) {
+          _.forEach(list, function (websocket) {
+            mpdConnections.data$({ mpd: new mpd(websocket, mpdHost, mpdPort, mpdPass) }).save$();
+            console.log((new Date()) + ' MPD created [' + mpdHost + ':' + mpdPort + ']');
+          });
+        });
       } else {
         console.warn((new Date()) + ' MPD exists [' + mpdHost + ':' + mpdPort + ']');
       }
     });
 
-    return done(null, {
-      msg: 'done'
-    });
+    return done(null, { msg: 'done' });
   }
 
   /**
@@ -101,14 +100,14 @@ function mpdProxy(options) {
     port = port || 8007;
 
     var ws = seneca.make('ws');
-    ws.list$({}, function(err, list) {
-      _.forEach(list, function(websocket) {
+    ws.list$({}, function (err, list) {
+      _.forEach(list, function (websocket) {
         console.log('ALLTHEWEBSOCKETS');
         console.log(websocket);
 
-        websocket.httpServer = http.createServer(function(request, response) {});
+        websocket.httpServer = http.createServer(function (request, response) {});
 
-        websocket.httpServer.listen(port, function() {
+        websocket.httpServer.listen(port, function () {
           websocket.serverActive = true;
           console.log((new Date()) + ' Server is listening on port ' + port);
         });
@@ -117,7 +116,7 @@ function mpdProxy(options) {
           httpServer: websocket.httpServer
         });
 
-        websocket.wsServer.on('request', function(r) {
+        websocket.wsServer.on('request', function (r) {
 
           var connection = r.accept('echo-protocol', r.origin);
 
@@ -126,11 +125,11 @@ function mpdProxy(options) {
 
           console.log((new Date()) + ' Connection accepted [' + id + ']');
 
-          connection.on('connectFailed', function(error) {
+          connection.on('connectFailed', function (error) {
             console.log('Connect Error: ' + error.toString());
           });
 
-          connection.on('message', function(message) {
+          connection.on('message', function (message) {
 
             // The string message that was sent to us
             // Parse msgString for the MPD to connect to.
@@ -159,7 +158,7 @@ function mpdProxy(options) {
 
           });
 
-          connection.on('close', function(reasonCode, description) {
+          connection.on('close', function (reasonCode, description) {
             delete websocket.clients[id];
             console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected [' + id + ']');
             websocket.serverActive = false;
