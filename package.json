@@ -1,0 +1,29 @@
+{
+  "name": "modulari",
+  "version": "1.0.0",
+  "description": "A music sharing service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajlende/modulari.git"
+  },
+  "author": "Alex Lende",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajlende/modulari/issues"
+  },
+  "homepage": "https://github.com/ajlende/modulari#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "bookshelf": "^0.9.1",
+    "express": "^4.13.4",
+    "passport": "^0.3.2",
+    "passport-google-oauth": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "seneca": "^1.0.0",
+    "seneca-web": "^0.6.0"
+  }
+}
