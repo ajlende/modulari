@@ -1,0 +1,28 @@
+{
+  "name": "modulari",
+  "version": "0.0.1",
+  "description": "Mopdiy client",
+  "main": "index.js",
+  "scripts": {
+    "test": ":"
+  },
+  "author": "ajlende",
+  "license": "MIT",
+  "dependencies": {
+    "@cycle/core": "*",
+    "@cycle/dom": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-stage-0": "*",
+    "babel-register": "*",
+    "font-awesome": "*",
+    "furtive": "*",
+    "rx": "*",
+    "virtual-dom": "*"
+  },
+  "devDependencies": {
+    "babel-eslint": "*",
+    "eslint": "*",
+    "eslint-plugin-babel": "*",
+    "eslint-plugin-react": "*"
+  }
+}
