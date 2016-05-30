@@ -2,12 +2,13 @@
   "name": "modulari",
   "version": "0.0.1",
   "description": "Mopdiy client",
-  "main": "index.js",
-  "scripts": {
-    "test": ":"
-  },
   "author": "ajlende",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ajlende/modulari.git"
+  },
+  "main": "index.js",
   "dependencies": {
     "@cycle/core": "*",
     "@cycle/dom": "*",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "babel-eslint": "*",
     "eslint": "*",
+    "eslint-config-xo-space": "*",
     "eslint-plugin-babel": "*",
     "eslint-plugin-react": "*"
   }

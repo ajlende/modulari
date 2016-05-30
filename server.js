@@ -1,28 +1,29 @@
-import { app, BrowserWindow, globalShortcut as Shortcut } from 'electron';
+import {app, BrowserWindow, globalShortcut as Shortcut} from 'electron';
+var path = require('path');
 
 let win = null;
 
 app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.quit();
-	}
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('ready', () => {
-	win = new BrowserWindow({ width: 1280, height: 720 });
-	win.setMenu(null);
-	win.loadURL('file://' + __dirname + '/src/index.html');
-	win.webContents.openDevTools();
+  win = new BrowserWindow({width: 1280, height: 720});
+  win.setMenu(null);
+  win.loadURL(path.join('file://', __dirname, '/src/index.html'));
+  win.webContents.openDevTools();
 
-	win.on('closed', () => {
-		win = null;
-	});
+  win.on('closed', () => {
+    win = null;
+  });
 
-	Shortcut.register('Control+Q', () => {
-		win.close();
-	});
+  Shortcut.register('Control+Q', () => {
+    win.close();
+  });
 
-	Shortcut.register('F12', () => {
-		win.toggleDevTools({ detach: true });
-	});
+  Shortcut.register('F12', () => {
+    win.toggleDevTools({detach: true});
+  });
 });
