@@ -15,6 +15,7 @@
     "babel-preset-es2015": "*",
     "babel-preset-stage-0": "*",
     "babel-register": "*",
+    "electron-debug": "^1.0.0",
     "font-awesome": "*",
     "furtive": "*",
     "rx": "*",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "babel-eslint": "*",
+    "devtron": "^1.1.2",
     "eslint": "*",
     "eslint-config-xo-space": "*",
     "eslint-plugin-babel": "*",
