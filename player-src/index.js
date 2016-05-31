@@ -22,10 +22,10 @@ const intent = DOM => ({
 const model = ({mouse, playToggle, input, seek}, video) => ({
   showBar: mouse.map(() => true)
     .merge(mouse.startWith(0)
-		.debounce(500)
-		.map(() => false))
-		.startWith(true)
-		.distinctUntilChanged(),
+    .debounce(500)
+    .map(() => false))
+    .startWith(true)
+    .distinctUntilChanged(),
   playing: playToggle.startWith(false).scan(x => !x),
   duration: video.state$.pluck('duration'),
   position: video.state$.pluck('position'),

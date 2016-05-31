@@ -15,15 +15,16 @@
     "babel-preset-es2015": "*",
     "babel-preset-stage-0": "*",
     "babel-register": "*",
-    "electron-debug": "^1.0.0",
+    "electron-debug": "*",
     "font-awesome": "*",
     "furtive": "*",
+    "mopidy": "*",
     "rx": "*",
     "virtual-dom": "*"
   },
   "devDependencies": {
     "babel-eslint": "*",
-    "devtron": "^1.1.2",
+    "devtron": "*",
     "eslint": "*",
     "eslint-config-xo-space": "*",
     "eslint-plugin-babel": "*",
