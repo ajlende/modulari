@@ -1,0 +1,27 @@
+{
+  "name": "modulari",
+  "productName": "Modulari",
+  "version": "0.0.1",
+  "description": "Mopdiy client",
+  "author": "Alex Lende <ajlende@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ajlende/modulari.git"
+  },
+  "scripts": {
+    "postinstall": "npm dedupe"
+  },
+  "main": "./scripts/browser/start.js",
+  "dependencies": {
+    "@cycle/core": "*",
+    "@cycle/dom": "*",
+    "babel-register": "*",
+    "electron-debug": "*",
+    "font-awesome": "*",
+    "furtive": "*",
+    "mopidy": "*",
+    "rx": "*",
+    "virtual-dom": "*"
+  }
+}
