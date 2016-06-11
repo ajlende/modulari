@@ -1,5 +1,5 @@
 import {h} from '@cycle/dom';
-import {Observable as $} from 'rx';
+import {Observable} from 'rx';
 import formatTime from '../utils/format-time';
 
 /* eslint-disable new-cap */
@@ -44,7 +44,7 @@ const model = ({mouse, playToggle, input, seek}, video) => ({
 });
 
 const view = ({showBar, playing, duration, position, volume, video}) =>
-    $.combineLatest(showBar, playing, duration, position, volume,
+    Observable.combineLatest(showBar, playing, duration, position, volume,
         (showBar, playing, duration, position, volume) =>
             h('.Player', [
               video.vtree,
