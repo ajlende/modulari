@@ -1,6 +1,6 @@
 import {h} from '@cycle/dom';
 import {Observable as $} from 'rx';
-import mediatime from '../utils/mediatime';
+import formatTime from '../utils/format-time';
 
 /* eslint-disable new-cap */
 const Event = event => el => el.events(event);
@@ -9,6 +9,18 @@ const click = Event('click');
 const mousemove = Event('mousemove');
 const input = Event('input');
 /* eslint-enable new-cap */
+
+const volumeIcon = volume => {
+  let icon = '';
+  if (volume === 0) {
+    icon = 'off';
+  } else if (volume < 70) {
+    icon = 'down';
+  } else {
+    icon = 'up';
+  }
+  return icon;
+};
 
 const intent = DOM => ({
   mouse: mousemove(DOM.select('.Player')),
@@ -39,9 +51,9 @@ const view = ({showBar, playing, duration, position, volume, video}) =>
               h(showBar ? 'div.controls' : 'div.controls.hidden', [
                 h('i.PlayToggle.fa' + (playing ? '.fa-pause' : '.fa-play')),
                 h('input.Seekbar', {type: 'range', min: 0, max: duration, value: position}),
-                h('.Seektime', `${mediatime(position | 0)} / ${mediatime(duration | 0)}`),
+                h('.Seektime', `${formatTime(position | 0)} / ${formatTime(duration | 0)}`),
                 h('input.Volume', {type: 'range', min: 0, max: 100, value: volume}),
-                h('i.VolumeIndicator.fa.fa-volume-' + (volume < 70 ? volume === 0 ? 'off' : 'down' : 'up'))
+                h('i.VolumeIndicator.fa.fa-volume-' + volumeIcon(volume))
               ])
             ])
     );
