@@ -6,7 +6,7 @@ import {Observable} from 'rx';
  * intent - Interpret DOM events as user's intended actions
  *
  * @param  {Object} DOM     DOM Driver source
- * @return {Object} actions Action Observables
+ * @return {Object} Object containting action$ Observables
  */
 const intent = DOM => ({
   navToggle$: DOM.select('#nav-btn').events('click')
@@ -15,8 +15,8 @@ const intent = DOM => ({
 /**
  * model - manage state
  *
- * @param  {Object} Action Observables
- * @return {Object} state$ Observables
+ * @param  {Object} actions Object containting action$ Observables
+ * @return {Object} state$ Observable
  */
 const model = ({navToggle$}) =>
   Observable.combineLatest(
@@ -30,7 +30,7 @@ const model = ({navToggle$}) =>
  * view - visually represent state from the model
  *
  * @param  {Object} state$ Observable
- * @return {Object} Observable of VTree as the DOM Driver Sink
+ * @return {Object} vtree$ Observabe as the DOM Driver Sink
  */
 const view = state$ => state$.map(({navToggle}) =>
   div('.grd.bg--dark-gray.fnt--light-gray', [
@@ -60,3 +60,4 @@ const HeaderComponent = ({DOM}) => {
 };
 
 export default sources => isolate(HeaderComponent)(sources);
+export {intent, model, view, HeaderComponent};

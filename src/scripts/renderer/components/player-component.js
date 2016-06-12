@@ -1,4 +1,5 @@
 import {Observable} from 'rx';
+import isolate from '@cycle/isolate';
 import {div} from '@cycle/dom';
 
 import makeHeaderComponent from './header/header-component';
@@ -9,8 +10,9 @@ import makeHeaderComponent from './header/header-component';
  * @param  {Object} state$ Observable
  * @return {Object} Observable of VTree as the DOM Driver Sink
  */
-const view = headerVTree =>
-  div('.header', [headerVTree]);
+const view = header => Observable.just(
+  div('.header', [header])
+);
 
 /**
  * PlayerComponent - combine model view and intent to create the component
@@ -19,15 +21,15 @@ const view = headerVTree =>
  * @return {Object} Sinks (write effects/outgoing messages)
  */
 const PlayerComponent = ({DOM}) => {
-  const Header = makeHeaderComponent({DOM});
+  const header = makeHeaderComponent({DOM}).DOM;
 
-  const vtree$ = Observable.just(
-    view(Header.DOM)
-  );
+  // all intent and state are covered in subcomponents
+  const vtree$ = view(header); // add components here as needed
 
   return {
     DOM: vtree$
   };
 };
 
-export default PlayerComponent;
+export default sources => isolate(PlayerComponent)(sources);
+export {view, PlayerComponent};
