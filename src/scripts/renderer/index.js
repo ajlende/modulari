@@ -1,12 +1,8 @@
-
 import {run} from '@cycle/core';
 import {makeDOMDriver} from '@cycle/dom';
 
-import makeVideoDriver from './drivers/video-driver';
+import PlayerComponent from './components/player-component';
 
-import VideoComponent from './components/video-component';
-
-run(VideoComponent, {
-  DOM: makeDOMDriver('#app'),
-  Player: makeVideoDriver()
+run(PlayerComponent, {
+  DOM: makeDOMDriver('#app')
 });

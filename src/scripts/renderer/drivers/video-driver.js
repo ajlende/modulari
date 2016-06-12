@@ -66,7 +66,7 @@ class Hook {
   }
 }
 
-export default () =>
+const makeVideoDriver = () =>
   source$ => {
     const node$ = new ReplaySubject();
 
@@ -100,3 +100,5 @@ export default () =>
       }
     };
   };
+
+export default makeVideoDriver;

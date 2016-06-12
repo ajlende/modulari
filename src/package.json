@@ -16,6 +16,7 @@
   "dependencies": {
     "@cycle/core": "*",
     "@cycle/dom": "*",
+    "@cycle/isolate": "*",
     "babel-register": "*",
     "electron-debug": "*",
     "font-awesome": "*",
