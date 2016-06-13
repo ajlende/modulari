@@ -3,6 +3,7 @@ import isolate from '@cycle/isolate';
 import {div} from '@cycle/dom';
 
 import makeHeaderComponent from './header/header-component';
+import makeTestComponent from './header/test-event-component';
 
 /**
  * view - visually represent state from the model
@@ -10,8 +11,11 @@ import makeHeaderComponent from './header/header-component';
  * @param  {Object} state$ Observable
  * @return {Object} Observable of VTree as the DOM Driver Sink
  */
-const view = header => Observable.just(
-  div('.header', [header])
+const view = (header, test) => Observable.just(
+  div('.header', [
+    header,
+    test
+  ])
 );
 
 /**
@@ -22,14 +26,16 @@ const view = header => Observable.just(
  */
 const PlayerComponent = ({DOM}) => {
   const header = makeHeaderComponent({DOM}).DOM;
+  const test = makeTestComponent({DOM}).DOM;
 
   // all intent and state are covered in subcomponents
-  const vtree$ = view(header); // add components here as needed
+  const vtree$ = view(header, test); // add components here as needed
 
   return {
     DOM: vtree$
   };
 };
 
-export default sources => isolate(PlayerComponent)(sources);
+// export default sources => isolate(PlayerComponent)(sources);
+export default PlayerComponent
 export {view, PlayerComponent};
