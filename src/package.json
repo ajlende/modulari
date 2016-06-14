@@ -23,6 +23,7 @@
     "furtive": "*",
     "mopidy": "*",
     "rx": "*",
+    "rx-combine-latest-obj": "*",
     "virtual-dom": "*"
   }
 }

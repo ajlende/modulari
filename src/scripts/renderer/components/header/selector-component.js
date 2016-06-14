@@ -1,25 +1,20 @@
-import {Observable} from 'rx';
+import combineLatestObj from 'rx-combine-latest-obj';
 
 import {div, i} from '@cycle/dom';
 import isolate from '@cycle/isolate';
 
 import {click} from '../../utils/cycle-event-helpers';
+import {toggle} from '../../utils/cycle-mvi-helpers';
 
-const toggle = action$ =>
-  action$
-    .map(ev => Boolean(ev))
-    .scan(x => !x)
-    .startWith(false);
+const intent = DOM => {
+  const navToggle$ = click(DOM.select('#nav-btn'));
 
-const intent = DOM => ({
-  navToggle$: click(DOM.select('#nav-btn'))
-});
+  return {
+    navToggle$: toggle(navToggle$)
+  };
+};
 
-const model = ({navToggle$}) =>
-  Observable.combineLatest(
-    toggle(navToggle$),
-    navToggle => ({navToggle})
-  );
+const model = actions => combineLatestObj(actions);
 
 const view = state$ => state$
   .map(({navToggle}) =>
@@ -41,5 +36,4 @@ const SelectorComponent = ({DOM}) => {
 };
 
 export default sources => isolate(SelectorComponent)(sources);
-// export default SelectorComponent;
 export {intent, model, view, SelectorComponent};

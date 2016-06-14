@@ -1,9 +1,10 @@
-import {div} from '@cycle/dom';
-import isolate from '@cycle/isolate';
 import {Observable} from 'rx';
 
-import makeSelectorComponent from './selector-component';
+import {div} from '@cycle/dom';
+import isolate from '@cycle/isolate';
+
 import makeControlsComponent from './controls-component';
+import makeSelectorComponent from './selector-component';
 
 const view = (selector, controls) => Observable.just(
   div('.grd.bg--dark-gray.fnt--light-gray', [

@@ -1,43 +1,33 @@
-import {Observable} from 'rx';
-import isolate from '@cycle/isolate';
+import combineLatestObj from 'rx-combine-latest-obj';
+
 import {div, i} from '@cycle/dom';
+import isolate from '@cycle/isolate';
 
 import {mouseup, mousedown} from '../../utils/cycle-event-helpers';
+import {toggle, hold} from '../../utils/cycle-mvi-helpers';
 
-const toggle = action$ =>
-  action$
-    .map(ev => Boolean(ev))
-    .scan(x => !x)
-    .startWith(false);
+const intent = DOM => {
+  const playPauseDown$ = mousedown(DOM.select('#play-pause'));
+  const playPauseUp$ = mouseup(DOM.select('#play-pause'));
+  const backwardDown$ = mousedown(DOM.select('#backward'));
+  const backwardUp$ = mouseup(DOM.select('#backward'));
+  const forwardDown$ = mousedown(DOM.select('#forward'));
+  const forwardUp$ = mouseup(DOM.select('#forward'));
 
-const highlighted = (mouseDown$, mouseUp$) =>
-  Observable
-    .merge(mouseDown$.map(() => true), mouseUp$.map(() => false))
-    .startWith(false);
+  return {
+    playing$: toggle(playPauseDown$),
+    backwardHighlighted$: hold(backwardDown$, backwardUp$),
+    playPauseHighlighted$: hold(playPauseDown$, playPauseUp$),
+    forwardHighlighted$: hold(forwardDown$, forwardUp$)
+  };
+};
 
-const intent = DOM => ({
-  playPauseDown$: mousedown(DOM.select('#play-pause')),
-  playPauseUp$: mouseup(DOM.select('#play-pause')),
-  backwardDown$: mousedown(DOM.select('#backward')),
-  backwardUp$: mouseup(DOM.select('#backward')),
-  forwardDown$: mousedown(DOM.select('#forward')),
-  forwardUp$: mouseup(DOM.select('#forward'))
-});
-
-const model = ({playPauseDown$, playPauseUp$, backwardDown$, backwardUp$, forwardDown$, forwardUp$}) =>
-    Observable.combineLatest(
-      toggle(playPauseDown$),
-      highlighted(playPauseDown$, playPauseUp$),
-      highlighted(backwardDown$, backwardUp$),
-      highlighted(forwardDown$, forwardUp$),
-      (playing, playPauseHighlighted, backwardHighlighted, forwardHighlighted) =>
-      ({playing, playPauseHighlighted, backwardHighlighted, forwardHighlighted})
-    );
+const model = actions => combineLatestObj(actions);
 
 const view = state$ => state$.map(({playing, playPauseHighlighted, backwardHighlighted, forwardHighlighted}) =>
     div('.grd-row-col-5-6', [
       i(`#backward.fa.fa-backward${backwardHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`),
-      i(`#play-pause.fa${playing ? '.fa-play' : '.fa-pause'}${playPauseHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`),
+      i(`#play-pause.fa${playing ? '.fa-pause' : '.fa-play'}${playPauseHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`),
       i(`#forward.fa.fa-forward${forwardHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`)
     ])
 );
@@ -53,4 +43,4 @@ const ControlsComponent = ({DOM}) => {
 };
 
 export default sources => isolate(ControlsComponent)(sources);
-export {toggle, highlighted, intent, model, view, ControlsComponent};
+export {intent, model, view, ControlsComponent};
