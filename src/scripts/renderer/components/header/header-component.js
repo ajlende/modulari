@@ -1,42 +1,29 @@
-import {span, div} from '@cycle/dom';
+import {div} from '@cycle/dom';
 import isolate from '@cycle/isolate';
 import {Observable} from 'rx';
 
 import makeSelectorComponent from './selector-component';
+import makeControlsComponent from './controls-component';
 
-/**
- * view - visually represent state from the model
- *
- * @param  {Object} state$ Observable
- * @return {Object} vtree$ Observabe as the DOM Driver Sink
- */
-const view = selector => Observable.just(
+const view = (selector, controls) => Observable.just(
   div('.grd.bg--dark-gray.fnt--light-gray', [
     div('.grd-row', [
-      selector
+      selector,
+      controls
     ])
   ])
 );
 
-/**
- * PlayerComponent - combine model view and intent to create the component
- *
- * @param  {Object} Sources
- * @return {Object} Sinks
- */
 const HeaderComponent = ({DOM}) => {
-  // Instantiate external compnents to use DOM
   const selector = makeSelectorComponent({DOM}).DOM;
+  const controls = makeControlsComponent({DOM}).DOM;
 
-  // Model-View-Intent
-  const vtree$ = view(selector);
+  const vtree$ = view(selector, controls);
 
-  // Sink
   return {
     DOM: vtree$
   };
 };
 
-// export default sources => isolate(HeaderComponent)(sources);
-export default HeaderComponent;
+export default sources => isolate(HeaderComponent)(sources);
 export {view, HeaderComponent};

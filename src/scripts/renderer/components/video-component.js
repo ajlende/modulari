@@ -1,14 +1,7 @@
 import {h} from '@cycle/dom';
 import {Observable} from 'rx';
 import formatTime from '../utils/format-time';
-
-/* eslint-disable new-cap */
-const Event = event => el => el.events(event);
-
-const click = Event('click');
-const mousemove = Event('mousemove');
-const input = Event('input');
-/* eslint-enable new-cap */
+import {mousemove, click, input} from '../utils/cycle-event-helpers';
 
 const volumeIcon = volume => {
   let icon = '';

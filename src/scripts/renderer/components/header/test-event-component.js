@@ -1,6 +1,8 @@
+import {Observable} from 'rx';
+
 import {div, input, p} from '@cycle/dom';
 import isolate from '@cycle/isolate';
-import {Observable} from 'rx';
+
 import {change} from '../../utils/cycle-event-helpers';
 
 const check = checkbox$ =>
@@ -27,12 +29,15 @@ const view = state$ => state$
     ])
   );
 
-function main({DOM}) {
-  const sinks = {
-    DOM: view(model(intent(DOM)))
+const main = ({DOM}) => {
+  const actions = intent(DOM);
+  const state$ = model(actions);
+  const vtree$ = view(state$);
+
+  return {
+    DOM: vtree$
   };
-  return sinks;
-}
+};
 
 export default sources => isolate(main)(sources);
 export {intent, model, view, main};
