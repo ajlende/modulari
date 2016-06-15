@@ -1,5 +1,6 @@
-import {ReplaySubject, Observable} from 'rx';
-import {h} from '@cycle/dom';
+/* eslint-disable no-class/no-class */
+import {ReplaySubject, Observable} from 'rx'
+import {h} from '@cycle/dom'
 
 const toPlayerState = player => ({
   duration: player.duration,
@@ -13,92 +14,91 @@ const toPlayerState = player => ({
   isMuted: player.muted,
   isPlaying: !player.paused,
   isSeeking: player.seeking,
-  isLooped: player.loop
-});
+  isLooped: player.loop,
+})
 
-const MEDIA_EVENTS = Observable.from(['play',
-  'pause',
-  'volumechange',
-  'durationchange',
-  'loadstart',
-  'emptied',
-  'ratechange',
-  'waiting',
-  'timeupdate']);
+const MEDIA_EVENTS = Observable.from([`play`,
+  `pause`,
+  `volumechange`,
+  `durationchange`,
+  `loadstart`,
+  `emptied`,
+  `ratechange`,
+  `waiting`,
+  `timeupdate`])
 
 const makePlayerEvent$ = player =>
   MEDIA_EVENTS
     .flatMap(event => Observable.fromEvent(player, event))
-    .pluck('target');
+    .pluck(`target`)
 
 const makeCommand$ = controls =>
   Observable.merge(...Object.keys(controls)
-    .map(name => controls[name].map(value => ({name, value}))));
+    .map(name => controls[name].map(value => ({name, value}))))
 
 const driverDefaults = () => ({
   isPlaying: false,
   position: 0,
   duration: 0,
-  volume: 100
-});
+  volume: 100,
+})
 
 /* eslint-disable brace-style */
 const media = {
-  play() { this.play(); },
-  pause() { this.pause(); },
-  load() { this.load(); },
-  volume(v) { this.volume = v * 0.01; },
-  position(p) { this.currentTime = p; },
+  play() { this.play() },
+  pause() { this.pause() },
+  load() { this.load() },
+  volume(v) { this.volume = v * 0.01 },
+  position(p) { this.currentTime = p },
   replay() {
-    this.currentTime = 0;
-    this.play();
-  }
-};
+    this.currentTime = 0
+    this.play()
+  },
+}
 /* eslint-enable brace-style */
 
 class Hook {
   constructor(node$) {
-    this.node$ = node$;
+    this.node$ = node$
   }
   hook(node, tagname) {
-    node._fqtn = tagname;
-    this.node$.onNext(node);
+    node._fqtn = tagname
+    this.node$.onNext(node)
   }
 }
 
 const makeVideoDriver = () =>
   source$ => {
-    const node$ = new ReplaySubject();
+    const node$ = new ReplaySubject()
 
     source$.forEach(([node, {name, value}]) => {
-      if (name in media) {
-        node::media[name](value);
-      }
-    });
+      if (name in media)
+        node::media[name](value)
+    })
 
     const createMediaHelper = mediaType => (tagName, properties, children) => {
-      const fullyQualifiedTagName = mediaType.concat(tagName.replace(' ', ''));
-      const filteredNode$ = node$.filter(node => node._fqtn === fullyQualifiedTagName);
+      const fullyQualifiedTagName = mediaType.concat(tagName.replace(` `, ``))
+      const filteredNode$ = node$.filter(node => node._fqtn === fullyQualifiedTagName)
       const state$ = filteredNode$.flatMapLatest(node => makePlayerEvent$(node).map(toPlayerState))
         .distinctUntilChanged()
-        .startWith(driverDefaults());
+        .startWith(driverDefaults())
 
       return {
         node$: filteredNode$,
         vtree: h(fullyQualifiedTagName, Object.assign({}, {[fullyQualifiedTagName]: new Hook(node$)}, properties), children),
         state$,
-        controls: controls => Observable.combineLatest(filteredNode$, makeCommand$(controls))
-      };
-    };
+        controls: controls => Observable.combineLatest(filteredNode$, makeCommand$(controls)),
+      }
+    }
 
     return {
-      video: createMediaHelper('video'),
-      audio: createMediaHelper('audio'),
+      video: createMediaHelper(`video`),
+      audio: createMediaHelper(`audio`),
       states$: players => Observable.combineLatest(players.map(player => player.state$)),
       controls: players => controls => {
-        Observable.merge(players.map(player => Observable.combineLatest(player.node$, makeCommand$(controls))));
-      }
-    };
-  };
+        Observable.merge(players.map(player => Observable.combineLatest(player.node$, makeCommand$(controls))))
+      },
+    }
+  }
 
-export default makeVideoDriver;
+export default makeVideoDriver

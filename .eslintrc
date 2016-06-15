@@ -1,5 +1,0 @@
-// http://eslint.org/docs/rules
-{
-  "extends": "xo-space",
-  "parser": "babel-eslint"
-}

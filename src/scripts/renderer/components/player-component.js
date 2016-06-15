@@ -1,22 +1,22 @@
-import {Observable} from 'rx';
-import isolate from '@cycle/isolate';
-import {div} from '@cycle/dom';
+import {Observable} from 'rx'
+import isolate from '@cycle/isolate'
+import {div} from '@cycle/dom'
 
-import makeHeaderComponent from './header/header-component';
+import makeHeaderComponent from './header/header-component'
 
 const view = header => Observable.just(
-  div('.header', [header])
-);
+  div(`.header`, [header])
+)
 
 const PlayerComponent = ({DOM}) => {
-  const header = makeHeaderComponent({DOM}).DOM;
+  const header = makeHeaderComponent({DOM}).DOM
 
-  const vtree$ = view(header);
+  const vtree$ = view(header)
 
   return {
-    DOM: vtree$
-  };
-};
+    DOM: vtree$,
+  }
+}
 
-export default sources => isolate(PlayerComponent)(sources);
-export {view, PlayerComponent};
+export default sources => isolate(PlayerComponent)(sources)
+export {view, PlayerComponent}

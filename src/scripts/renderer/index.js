@@ -1,8 +1,8 @@
-import {run} from '@cycle/core';
-import {makeDOMDriver} from '@cycle/dom';
+import {run} from '@cycle/core'
+import {makeDOMDriver} from '@cycle/dom'
 
-import PlayerComponent from './components/player-component';
+import PlayerComponent from './components/player-component'
 
 run(PlayerComponent, {
-  DOM: makeDOMDriver('#app')
-});
+  DOM: makeDOMDriver(`#app`),
+})

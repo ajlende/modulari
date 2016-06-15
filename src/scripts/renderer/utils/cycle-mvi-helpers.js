@@ -1,4 +1,4 @@
-import {Observable} from 'rx';
+import {Observable} from 'rx'
 
 /**
  * toggle - toggles output event$ when there is a new event on the input event$
@@ -10,7 +10,7 @@ const toggle = event$ =>
   event$
     .map(ev => Boolean(ev))
     .scan(x => !x)
-    .startWith(false);
+    .startWith(false)
 
 /**
  * hold - a mreged stream of mousedown and mouseup events mapped to true and false, respectively.
@@ -22,7 +22,7 @@ const toggle = event$ =>
 const hold = (mouseDown$, mouseUp$) =>
   Observable
     .merge(mouseDown$.map(() => true), mouseUp$.map(() => false))
-    .startWith(false);
+    .startWith(false)
 
 /**
  * rangeVal - takes an event stream from a range element and returns the value.
@@ -32,6 +32,6 @@ const hold = (mouseDown$, mouseUp$) =>
  * @return Observable stream of the value of the range input
  */
 const rangeVal = (range$, first) =>
-  range$.map(ev => ev.target.value).startWith(first);
+  range$.map(ev => ev.target.value).startWith(first)
 
-export {toggle, hold, rangeVal};
+export {toggle, hold, rangeVal}
