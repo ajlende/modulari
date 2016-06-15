@@ -21,7 +21,6 @@ const model = actions => combineLatestObj(actions)
 const view = state$ => state$
   .map(({volToggle, volValue}) => {
     let volIcon
-
     if (volValue > 70)
       volIcon = `.fa-volume-up`
     else if (volValue > 0)
@@ -29,7 +28,7 @@ const view = state$ => state$
     else
       volIcon = `.fa-volume-off`
 
-    let volColor = volToggle ? `.fnt--red` : `.fnt--blue`
+    const volColor = volToggle ? `.fnt--red` : `.fnt--blue`
 
     return div(`.grd-row-col-1-6`, [
       div(`#vol-btn`, [

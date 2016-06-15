@@ -1,4 +1,3 @@
-/* eslint-disable no-class/no-class */
 import {ReplaySubject, Observable} from 'rx'
 import {h} from '@cycle/dom'
 
@@ -43,7 +42,6 @@ const driverDefaults = () => ({
   volume: 100,
 })
 
-/* eslint-disable brace-style */
 const media = {
   play() { this.play() },
   pause() { this.pause() },
@@ -55,7 +53,6 @@ const media = {
     this.play()
   },
 }
-/* eslint-enable brace-style */
 
 class Hook {
   constructor(node$) {
@@ -73,6 +70,8 @@ const makeVideoDriver = () =>
 
     source$.forEach(([node, {name, value}]) => {
       if (name in media)
+        // stage-0 bind/call operator same as
+        // media[name].call(node, value)
         node::media[name](value)
     })
 
@@ -85,7 +84,8 @@ const makeVideoDriver = () =>
 
       return {
         node$: filteredNode$,
-        vtree: h(fullyQualifiedTagName, Object.assign({}, {[fullyQualifiedTagName]: new Hook(node$)}, properties), children),
+        vtree: h(fullyQualifiedTagName,
+          Object.assign({}, {[fullyQualifiedTagName]: new Hook(node$)}, properties), children),
         state$,
         controls: controls => Observable.combineLatest(filteredNode$, makeCommand$(controls)),
       }
@@ -96,7 +96,8 @@ const makeVideoDriver = () =>
       audio: createMediaHelper(`audio`),
       states$: players => Observable.combineLatest(players.map(player => player.state$)),
       controls: players => controls => {
-        Observable.merge(players.map(player => Observable.combineLatest(player.node$, makeCommand$(controls))))
+        Observable.merge(players.map(player =>
+          Observable.combineLatest(player.node$, makeCommand$(controls))))
       },
     }
   }

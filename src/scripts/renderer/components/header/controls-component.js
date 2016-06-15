@@ -26,15 +26,15 @@ const model = actions => combineLatestObj(actions)
 
 const view = state$ => state$.map(({playing, playPauseHighlighted, backwardHighlighted,
   forwardHighlighted}) => {
-  let backwardColor = backwardHighlighted ? `.fnt--red` : `.fnt--blue`
-  let playPauseColor = playPauseHighlighted ? `.fnt--red` : `.fnt--blue`
-  let forwardColor = forwardHighlighted ? `.fnt--red` : `.fnt--blue`
-  let playPauseIcon = playing ? `.fa-pause` : `.fa-play`
+  const backwardColor = backwardHighlighted ? `.fnt--red` : `.fnt--blue`
+  const playPauseColor = playPauseHighlighted ? `.fnt--red` : `.fnt--blue`
+  const forwardColor = forwardHighlighted ? `.fnt--red` : `.fnt--blue`
+  const playPauseIcon = playing ? `.fa-pause` : `.fa-play`
 
   return div(`.grd-row-col-2-6`, [
-    i(`#backward.fa.fa-backward${backwardColor}.p1`),
-    i(`#play-pause.fa${playPauseIcon}${playPauseColor}.p1`),
-    i(`#forward.fa.fa-forward${forwardColor}.p1`),
+    i(`#backward.fa.fa-fw.fa-backward${backwardColor}.p1`),
+    i(`#play-pause.fa.fa-fw${playPauseIcon}${playPauseColor}.p1`),
+    i(`#forward.fa.fa-fw.fa-forward${forwardColor}.p1`),
   ])
 })
 

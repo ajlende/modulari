@@ -2,8 +2,8 @@ import {Observable} from 'rx'
 import Mpd from 'mpd'
 
 const makeMPDDriver = (port, host) => {
-  let mpd = new Mpd()
-  let client = mpd.connect({port, host})
+  const mpd = new Mpd()
+  const client = mpd.connect({port, host})
 
   const setupClient = (observer) => {
     // when MPD connects

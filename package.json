@@ -11,7 +11,8 @@
   },
   "scripts": {
     "postinstall": "(cd src && npm install)",
-    "clean": "rm -rf node_modules; rm -rf src/node_modules",
+    "clean": "rm -rf node_modules && rm -rf src/node_modules",
+    "eslint": "eslint src/scripts/renderer",
     "start": "electron src"
   },
   "dependencies": {
