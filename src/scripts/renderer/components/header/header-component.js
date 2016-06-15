@@ -5,12 +5,14 @@ import isolate from '@cycle/isolate';
 
 import makeControlsComponent from './controls-component';
 import makeSelectorComponent from './selector-component';
+import makeVolumeComponent from './volume-component';
 
-const view = (selector, controls) => Observable.just(
+const view = (selector, controls, volume) => Observable.just(
   div('.grd.bg--dark-gray.fnt--light-gray', [
     div('.grd-row', [
       selector,
-      controls
+      controls,
+      volume
     ])
   ])
 );
@@ -18,8 +20,9 @@ const view = (selector, controls) => Observable.just(
 const HeaderComponent = ({DOM}) => {
   const selector = makeSelectorComponent({DOM}).DOM;
   const controls = makeControlsComponent({DOM}).DOM;
+  const volume = makeVolumeComponent({DOM}).DOM;
 
-  const vtree$ = view(selector, controls);
+  const vtree$ = view(selector, controls, volume);
 
   return {
     DOM: vtree$

@@ -25,7 +25,7 @@ const intent = DOM => {
 const model = actions => combineLatestObj(actions);
 
 const view = state$ => state$.map(({playing, playPauseHighlighted, backwardHighlighted, forwardHighlighted}) =>
-    div('.grd-row-col-5-6', [
+    div('.grd-row-col-2-6', [
       i(`#backward.fa.fa-backward${backwardHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`),
       i(`#play-pause.fa${playing ? '.fa-pause' : '.fa-play'}${playPauseHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`),
       i(`#forward.fa.fa-forward${forwardHighlighted ? '.fnt--red' : '.fnt--blue'}.p1`)
