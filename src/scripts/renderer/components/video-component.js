@@ -3,7 +3,7 @@ import {Observable} from 'rx'
 import formatTime from '../utils/format-time'
 import {mousemove, click, input} from '../utils/cycle-event-helpers'
 
-const volumeIcon = volume => {
+const volumeIcon = (volume) => {
   let icon
 
   if (volume === 0)
@@ -16,11 +16,11 @@ const volumeIcon = volume => {
   return icon
 }
 
-const intent = DOM => ({
+const intent = (DOM) => ({
   mouse: mousemove(DOM.select(`.Player`)),
   playToggle: click(DOM.select(`.PlayToggle`)).merge(click(DOM.select(`.Video`))),
-  seek: input(DOM.select(`.Seekbar`)).map(e => e.target.value),
-  volume: input(DOM.select(`.Volume`)).map(e => e.target.value),
+  seek: input(DOM.select(`.Seekbar`)).map((e) => e.target.value),
+  volume: input(DOM.select(`.Volume`)).map((e) => e.target.value),
 })
 
 const model = ({mouse, playToggle}, video) => ({
@@ -30,7 +30,7 @@ const model = ({mouse, playToggle}, video) => ({
       .map(() => false))
     .startWith(true)
     .distinctUntilChanged(),
-  playing: playToggle.startWith(false).scan(x => !x),
+  playing: playToggle.startWith(false).scan((x) => !x),
   duration: video.state$.pluck(`duration`),
   position: video.state$.pluck(`position`),
   volume: video.state$.pluck(`volume`),
@@ -64,8 +64,8 @@ const MediaComponent = ({DOM, Player}) => {
   return {
     DOM: view(data),
     Player: video.controls({
-      play: data.playing.filter(x => x),
-      pause: data.playing.filter(x => !x),
+      play: data.playing.filter((x) => x),
+      pause: data.playing.filter((x) => !x),
       position: actions.seek,
       volume: actions.volume,
     }),

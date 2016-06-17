@@ -23,5 +23,5 @@ const PlayerComponent = ({DOM}) => {
   }
 }
 
-export default sources => isolate(PlayerComponent)(sources)
+export default (sources) => isolate(PlayerComponent)(sources)
 export {view, PlayerComponent}

@@ -58,5 +58,5 @@ const FormComponent = ({DOM}) => {
   }
 }
 
-export default sources => isolate(FormComponent)(sources)
+export default (sources) => isolate(FormComponent)(sources)
 export {view, FormComponent}

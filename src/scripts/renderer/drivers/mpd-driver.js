@@ -13,7 +13,7 @@ const makeMPDDriver = (port, host) => {
     })
 
     // when there is a system message
-    client.on(`system`, name => {
+    client.on(`system`, (name) => {
       console.log(`driver | update: ${name}`)
       observer.onNext(name)
     })
@@ -32,10 +32,10 @@ const makeMPDDriver = (port, host) => {
     })
   }
 
-  return source$ => {
-    source$.subscribe(source => client.sendCommand(source))
+  return (source$) => {
+    source$.subscribe((source) => client.sendCommand(source))
 
-    return Observable.create(observer => setupClient(observer)).share()
+    return Observable.create((observer) => setupClient(observer)).share()
   }}
 
 export default makeMPDDriver

@@ -39,7 +39,7 @@
  */
 
 /* eslint-disable no-multi-spaces, max-len */
-const Event = event => el => el.events(event)
+const Event = (event) => (el) => el.events(event)
 
 // Misc Events
 const error          = Event(`error`)

@@ -7,20 +7,20 @@ import {click} from '../../utils/cycle-event-helpers'
 import {toggle} from '../../utils/cycle-mvi-helpers'
 
 const intent = (DOM) => {
-  const navToggle$ = click(DOM.select(`i`))
+  const queueToggle$ = click(DOM.select(`i`))
 
   return {
-    navToggle$: toggle(navToggle$),
+    queueToggle$: toggle(queueToggle$),
   }
 }
 
 const model = (actions) => combineLatestObj(actions)
 
-const view = (state$) => state$.map(({navToggle}) => {
-  const navColor = navToggle ? `.text-color-info` : ``
-  return div(`.selector`, [
+const view = (state$) => state$.map(({queueToggle}) => {
+  const navColor = queueToggle ? `.text-color-info` : ``
+  return div(`.queue`, [
     button(`.btn.btn-link.btn-sm`, [
-      i(`.icon.fa.fa-navicon${navColor}`),
+      i(`.icon.fa.fa-list${navColor}`),
     ]),
   ])
 })

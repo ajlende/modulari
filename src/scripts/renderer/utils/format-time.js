@@ -1,6 +1,6 @@
 const pad = (char, n, s) => char.repeat(n - s.length) + s
 
-export default t => {
+export default (t) => {
   let s = t
   let m = s / 60|0
   s -= m * 60

@@ -6,10 +6,10 @@ import {Observable} from 'rx'
  * @param {Observable} event$ - any event stream
  * @return Observable stream of toggled true/false
  */
-const toggle = event$ =>
+const toggle = (event$) =>
   event$
-    .map(ev => Boolean(ev))
-    .scan(x => !x)
+    .map((e) => Boolean(e))
+    .scan((x) => !x)
     .startWith(false)
 
 /**
@@ -32,6 +32,6 @@ const hold = (mouseDown$, mouseUp$) =>
  * @return Observable stream of the value of the range input
  */
 const rangeVal = (range$, first) =>
-  range$.map(ev => ev.target.value).startWith(first)
+  range$.map((e) => e.target.value).startWith(first)
 
 export {toggle, hold, rangeVal}

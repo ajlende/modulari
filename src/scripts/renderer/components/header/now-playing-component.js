@@ -11,5 +11,5 @@ const NowPlayingComponent = () => {
   }
 }
 
-export default sources => isolate(NowPlayingComponent)(sources)
+export default (sources) => isolate(NowPlayingComponent)(sources)
 export {NowPlayingComponent}

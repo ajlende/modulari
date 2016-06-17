@@ -6,7 +6,7 @@ import isolate from '@cycle/isolate'
 import {mouseup, mousedown} from '../../utils/cycle-event-helpers'
 import {toggle, hold} from '../../utils/cycle-mvi-helpers'
 
-const intent = DOM => {
+const intent = (DOM) => {
   const playPauseDown$ = mousedown(DOM.select(`#play-pause i`))
   const playPauseUp$ = mouseup(DOM.select(`#play-pause i`))
   const backwardDown$ = mousedown(DOM.select(`#backward i`))
@@ -22,9 +22,9 @@ const intent = DOM => {
   }
 }
 
-const model = actions => combineLatestObj(actions)
+const model = (actions) => combineLatestObj(actions)
 
-const view = state$ => state$.map(({playing, playPauseHeld, backwardHeld, forwardHeld}) => {
+const view = (state$) => state$.map(({playing, playPauseHeld, backwardHeld, forwardHeld}) => {
   const backwardColor = backwardHeld ? `.text-color-info` : ``
   const playPauseColor = playPauseHeld ? `.text-color-info` : ``
   const forwardColor = forwardHeld ? `.text-color-info` : ``
@@ -50,5 +50,5 @@ const ControlsComponent = ({DOM}) => {
   }
 }
 
-export default sources => isolate(ControlsComponent)(sources)
+export default (sources) => isolate(ControlsComponent)(sources)
 export {intent, model, view, ControlsComponent}

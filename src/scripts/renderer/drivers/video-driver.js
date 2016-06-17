@@ -1,7 +1,7 @@
 import {ReplaySubject, Observable} from 'rx'
 import {h} from '@cycle/dom'
 
-const toPlayerState = player => ({
+const toPlayerState = (player) => ({
   duration: player.duration,
   volume: player.volume * 100,
   position: player.currentTime,
@@ -26,14 +26,14 @@ const MEDIA_EVENTS = Observable.from([`play`,
   `waiting`,
   `timeupdate`])
 
-const makePlayerEvent$ = player =>
+const makePlayerEvent$ = (player) =>
   MEDIA_EVENTS
-    .flatMap(event => Observable.fromEvent(player, event))
+    .flatMap((event) => Observable.fromEvent(player, event))
     .pluck(`target`)
 
-const makeCommand$ = controls =>
+const makeCommand$ = (controls) =>
   Observable.merge(...Object.keys(controls)
-    .map(name => controls[name].map(value => ({name, value}))))
+    .map((name) => controls[name].map((value) => ({name, value}))))
 
 const driverDefaults = () => ({
   isPlaying: false,
@@ -64,42 +64,41 @@ class Hook {
   }
 }
 
-const makeVideoDriver = () =>
-  source$ => {
-    const node$ = new ReplaySubject()
+const makeVideoDriver = () => (source$) => {
+  const node$ = new ReplaySubject()
 
-    source$.forEach(([node, {name, value}]) => {
-      if (name in media)
-        // stage-0 bind/call operator same as
-        // media[name].call(node, value)
-        node::media[name](value)
-    })
+  source$.forEach(([node, {name, value}]) => {
+    if (name in media)
+      // stage-0 bind/call operator same as
+      // media[name].call(node, value)
+      node::media[name](value)
+  })
 
-    const createMediaHelper = mediaType => (tagName, properties, children) => {
-      const fullyQualifiedTagName = mediaType.concat(tagName.replace(` `, ``))
-      const filteredNode$ = node$.filter(node => node._fqtn === fullyQualifiedTagName)
-      const state$ = filteredNode$.flatMapLatest(node => makePlayerEvent$(node).map(toPlayerState))
-        .distinctUntilChanged()
-        .startWith(driverDefaults())
-
-      return {
-        node$: filteredNode$,
-        vtree: h(fullyQualifiedTagName,
-          Object.assign({}, {[fullyQualifiedTagName]: new Hook(node$)}, properties), children),
-        state$,
-        controls: controls => Observable.combineLatest(filteredNode$, makeCommand$(controls)),
-      }
-    }
+  const createMediaHelper = (mediaType) => (tagName, properties, children) => {
+    const fullyQualifiedTagName = mediaType.concat(tagName.replace(` `, ``))
+    const filteredNode$ = node$.filter((node) => node._fqtn === fullyQualifiedTagName)
+    const state$ = filteredNode$.flatMapLatest((node) => makePlayerEvent$(node).map(toPlayerState))
+      .distinctUntilChanged()
+      .startWith(driverDefaults())
 
     return {
-      video: createMediaHelper(`video`),
-      audio: createMediaHelper(`audio`),
-      states$: players => Observable.combineLatest(players.map(player => player.state$)),
-      controls: players => controls => {
-        Observable.merge(players.map(player =>
-          Observable.combineLatest(player.node$, makeCommand$(controls))))
-      },
+      node$: filteredNode$,
+      vtree: h(fullyQualifiedTagName,
+        Object.assign({}, {[fullyQualifiedTagName]: new Hook(node$)}, properties), children),
+      state$,
+      controls: (controls) => Observable.combineLatest(filteredNode$, makeCommand$(controls)),
     }
   }
+
+  return {
+    video: createMediaHelper(`video`),
+    audio: createMediaHelper(`audio`),
+    states$: (players) => Observable.combineLatest(players.map((player) => player.state$)),
+    controls: (players) => (controls) => {
+      Observable.merge(players.map((player) =>
+        Observable.combineLatest(player.node$, makeCommand$(controls))))
+    },
+  }
+}
 
 export default makeVideoDriver

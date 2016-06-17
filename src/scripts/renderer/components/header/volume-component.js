@@ -6,7 +6,7 @@ import isolate from '@cycle/isolate'
 import {click, input as formInput} from '../../utils/cycle-event-helpers'
 import {toggle, rangeVal} from '../../utils/cycle-mvi-helpers'
 
-const intent = DOM => {
+const intent = (DOM) => {
   const volToggle$ = click(DOM.select(`i`))
   const volValue$ = formInput(DOM.select(`input`))
 
@@ -16,9 +16,9 @@ const intent = DOM => {
   }
 }
 
-const model = actions => combineLatestObj(actions)
+const model = (actions) => combineLatestObj(actions)
 
-const view = state$ => state$
+const view = (state$) => state$
   .map(({volToggle, volValue}) => {
     let volIcon
     if (volValue > 70)
@@ -33,7 +33,7 @@ const view = state$ => state$
     return div(`.volume`, [
       button(`.btn.btn-link.btn-sm`, i(`.icon.fa.fa-fw${volIcon}${volColor}`)),
       span(`${volValue}`),
-      input(`.vertical.block.abs${volToggle ? `` : `.hide`}`, {
+      input(`.vertical.abs${volToggle ? `.block` : `.hide`}`, {
         type: `range`,
         min: `0`,
         max: `100`,
@@ -52,5 +52,5 @@ const SelectorComponent = ({DOM}) => {
   }
 }
 
-export default sources => isolate(SelectorComponent)(sources)
+export default (sources) => isolate(SelectorComponent)(sources)
 export {intent, model, view, SelectorComponent}

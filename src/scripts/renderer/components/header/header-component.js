@@ -7,8 +7,9 @@ import makeControlsComponent from './controls-component'
 import makeSelectorComponent from './selector-component'
 import makeVolumeComponent from './volume-component'
 import makeNowPlayingComponent from './now-playing-component'
+import makeQueueComponent from './queue-component'
 
-const view = ({selector, controls, volume, nowPlaying}) => Observable.just(
+const view = ({selector, controls, volume, nowPlaying, queue}) => Observable.just(
   header(`.navbar`, [
     section(`.navbar-section`, [
       selector,
@@ -18,6 +19,9 @@ const view = ({selector, controls, volume, nowPlaying}) => Observable.just(
     section(`.navbar-section`, [
       nowPlaying,
     ]),
+    section(`.navbar-section`, [
+      queue,
+    ]),
   ])
 )
 
@@ -26,13 +30,14 @@ const HeaderComponent = ({DOM}) => {
   const controls = makeControlsComponent({DOM}).DOM
   const volume = makeVolumeComponent({DOM}).DOM
   const nowPlaying = makeNowPlayingComponent({DOM}).DOM
+  const queue = makeQueueComponent({DOM}).DOM
 
-  const vtree$ = view({selector, controls, volume, nowPlaying})
+  const vtree$ = view({selector, controls, volume, nowPlaying, queue})
 
   return {
     DOM: vtree$,
   }
 }
 
-export default sources => isolate(HeaderComponent)(sources)
+export default (sources) => isolate(HeaderComponent)(sources)
 export {view, HeaderComponent}
