@@ -28,23 +28,16 @@ const view = state$ => state$
     else
       volIcon = `.fa-volume-off`
 
-    const volColor = volToggle ? `.text-color-danger` : `.text-color-info`
+    const volColor = volToggle ? `.text-color-info` : ``
 
     return div(`.volume`, [
       button(`.btn.btn-link.btn-sm`, i(`.icon.fa.fa-fw${volIcon}${volColor}`)),
       span(`${volValue}`),
-      input(`.form-input`, {
+      input(`.vertical.block.abs${volToggle ? `` : `.hide`}`, {
         type: `range`,
         min: `0`,
         max: `100`,
         value: volValue,
-        style: {
-          webkitAppearance: `slider-vertical`,
-          display: volToggle ? `block` : `none`,
-          position: `absolute`,
-          width: `2em`,
-          height: `8em`,
-        },
       }),
     ])
   })

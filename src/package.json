@@ -20,10 +20,11 @@
     "babel-register": "*",
     "electron-debug": "*",
     "font-awesome": "*",
-    "spectre.css": "*",
     "mopidy": "*",
+    "open-sans-fontface": "*",
     "rx": "*",
     "rx-combine-latest-obj": "*",
+    "spectre.css": "*",
     "virtual-dom": "*"
   }
 }

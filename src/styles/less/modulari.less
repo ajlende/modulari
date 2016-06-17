@@ -1,4 +1,21 @@
+// Open Sans @font-face kit
+@import '../../node_modules/open-sans-fontface/open-sans.less';
+
+// Spectre.css by Yan Zhu @picturepan2
 @import '../../node_modules/spectre.css/spectre.less';
+
+// Override/Extend Spectre.css
+@import 'fixes.less';
 @import 'variables.less';
 @import 'utilities.less';
+@import 'range.less';
+
+// Component specific styles
 @import 'header.less';
+
+// Global Styles
+body {
+  background-color: @core-light-color;
+  color: @core-dark-color;
+  -webkit-user-select: none;
+}

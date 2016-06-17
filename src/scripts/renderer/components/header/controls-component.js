@@ -16,19 +16,18 @@ const intent = DOM => {
 
   return {
     playing$: toggle(playPauseDown$),
-    backwardHighlighted$: hold(backwardDown$, backwardUp$),
-    playPauseHighlighted$: hold(playPauseDown$, playPauseUp$),
-    forwardHighlighted$: hold(forwardDown$, forwardUp$),
+    backwardHeld$: hold(backwardDown$, backwardUp$),
+    playPauseHeld: hold(playPauseDown$, playPauseUp$),
+    forwardHeld: hold(forwardDown$, forwardUp$),
   }
 }
 
 const model = actions => combineLatestObj(actions)
 
-const view = state$ => state$.map(({playing, playPauseHighlighted, backwardHighlighted,
-  forwardHighlighted}) => {
-  const backwardColor = backwardHighlighted ? `.text-color-danger` : `.text-color-info`
-  const playPauseColor = playPauseHighlighted ? `.text-color-danger` : `.text-color-info`
-  const forwardColor = forwardHighlighted ? `.text-color-danger` : `.text-color-info`
+const view = state$ => state$.map(({playing, playPauseHeld, backwardHeld, forwardHeld}) => {
+  const backwardColor = backwardHeld ? `.text-color-info` : ``
+  const playPauseColor = playPauseHeld ? `.text-color-info` : ``
+  const forwardColor = forwardHeld ? `.text-color-info` : ``
   const playPauseIcon = playing ? `.fa-pause` : `.fa-play`
 
   return div(`.controls`, [

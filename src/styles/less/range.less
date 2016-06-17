@@ -1,0 +1,40 @@
+// Missing styling for range slider in spectre
+input[type="range"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &::-webkit-slider-runnable-track,
+  &::-webkit-slider-thumb {
+    background-color: @body-bg;
+    border: .1rem solid @core-border-color;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: .3rem;
+    border-radius: @global-radius;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    margin-top: -.5rem;
+  }
+
+  &[disabled]::-webkit-slider-runnable-track,
+  &[disabled]::-webkit-slider-thumb {
+    cursor: not-allowed;
+    border-color: @core-meta-color;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.vertical {
+    transform: rotate(270deg);
+  }
+}

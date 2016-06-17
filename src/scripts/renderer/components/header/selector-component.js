@@ -17,7 +17,7 @@ const intent = DOM => {
 const model = actions => combineLatestObj(actions)
 
 const view = state$ => state$.map(({navToggle}) => {
-  const navColor = navToggle ? `.text-color-danger` : `.text-color-info`
+  const navColor = navToggle ? `.text-color-info` : ``
   return div(`.selector`, [
     button(`.btn.btn-link.btn-sm`, [
       i(`.icon.fa.fa-navicon${navColor}`),
