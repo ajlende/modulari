@@ -1,13 +1,13 @@
 import combineLatestObj from 'rx-combine-latest-obj'
 
-import {div, i} from '@cycle/dom'
+import {button, div, i} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 
 import {click} from '../../utils/cycle-event-helpers'
 import {toggle} from '../../utils/cycle-mvi-helpers'
 
 const intent = DOM => {
-  const navToggle$ = click(DOM.select(`#nav-btn`))
+  const navToggle$ = click(DOM.select(`i`))
 
   return {
     navToggle$: toggle(navToggle$),
@@ -17,10 +17,10 @@ const intent = DOM => {
 const model = actions => combineLatestObj(actions)
 
 const view = state$ => state$.map(({navToggle}) => {
-  const navColor = navToggle ? `.fnt--red` : `.fnt--blue`
-  return div(`.grd-row-col-1-6`, [
-    div(`#nav-btn`, [
-      i(`.fa.fa-navicon${navColor}.p1`),
+  const navColor = navToggle ? `.text-color-danger` : `.text-color-info`
+  return div(`.selector`, [
+    button(`.btn.btn-link.btn-sm`, [
+      i(`.icon.fa.fa-navicon${navColor}`),
     ]),
   ])
 })

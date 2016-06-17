@@ -20,7 +20,7 @@
     "babel-register": "*",
     "electron-debug": "*",
     "font-awesome": "*",
-    "furtive": "*",
+    "spectre.css": "*",
     "mopidy": "*",
     "rx": "*",
     "rx-combine-latest-obj": "*",

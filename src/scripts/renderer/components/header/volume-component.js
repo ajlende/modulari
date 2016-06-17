@@ -1,13 +1,13 @@
 import combineLatestObj from 'rx-combine-latest-obj'
 
-import {div, i, input} from '@cycle/dom'
+import {button, div, i, input, span} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 
 import {click, input as formInput} from '../../utils/cycle-event-helpers'
 import {toggle, rangeVal} from '../../utils/cycle-mvi-helpers'
 
 const intent = DOM => {
-  const volToggle$ = click(DOM.select(`#vol-btn`))
+  const volToggle$ = click(DOM.select(`i`))
   const volValue$ = formInput(DOM.select(`input`))
 
   return {
@@ -28,14 +28,12 @@ const view = state$ => state$
     else
       volIcon = `.fa-volume-off`
 
-    const volColor = volToggle ? `.fnt--red` : `.fnt--blue`
+    const volColor = volToggle ? `.text-color-danger` : `.text-color-info`
 
-    return div(`.grd-row-col-1-6`, [
-      div(`#vol-btn`, [
-        i(`.fa${volIcon}${volColor}.p1`),
-        `${volValue}`,
-      ]),
-      input({
+    return div(`.volume`, [
+      button(`.btn.btn-link.btn-sm`, i(`.icon.fa.fa-fw${volIcon}${volColor}`)),
+      span(`${volValue}`),
+      input(`.form-input`, {
         type: `range`,
         min: `0`,
         max: `100`,

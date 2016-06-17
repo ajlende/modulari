@@ -5,7 +5,9 @@ import {div} from '@cycle/dom'
 import makeHeaderComponent from './header/header-component'
 
 const view = header => Observable.just(
-  div(`.header`, [header])
+  div(`.wrapper`, [
+    header,
+  ])
 )
 
 const PlayerComponent = ({DOM}) => {

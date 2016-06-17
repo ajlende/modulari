@@ -6,7 +6,8 @@ This project is in its infancy, so many things will be broken or not exist at th
 
 ## Usage
 ```sh
-$ npm install -g electron-prebuilt
+$ npm install -g electron-prebuilt less eslint
 $ npm install
+$ npm run less
 $ npm start
 ```
