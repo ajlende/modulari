@@ -20,7 +20,6 @@
     "babel-register": "*",
     "electron-debug": "*",
     "font-awesome": "*",
-    "mopidy": "*",
     "open-sans-fontface": "*",
     "rx": "*",
     "rx-combine-latest-obj": "*",
