@@ -27,9 +27,9 @@ const view = ({selector, controls, volume, nowPlaying, queue, search}) => Observ
   ])
 )
 
-const HeaderComponent = ({DOM}) => {
+const HeaderComponent = ({DOM, Playback}) => {
   const selector = makeSelectorComponent({DOM}).DOM
-  const controls = makeControlsComponent({DOM}).DOM
+  const controls = makeControlsComponent({DOM, Playback}).DOM
   const volume = makeVolumeComponent({DOM}).DOM
   const nowPlaying = makeNowPlayingComponent({DOM}).DOM
   const queue = makeQueueComponent({DOM}).DOM

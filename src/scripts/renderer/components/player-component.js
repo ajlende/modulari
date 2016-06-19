@@ -12,8 +12,8 @@ const view = ({header, form}) => Observable.just(
   ])
 )
 
-const PlayerComponent = ({DOM}) => {
-  const header = makeHeaderComponent({DOM}).DOM
+const PlayerComponent = ({DOM, Playback}) => {
+  const header = makeHeaderComponent({DOM, Playback}).DOM
   const form = makeFormComponent({DOM}).DOM
 
   const vtree$ = view({header, form})

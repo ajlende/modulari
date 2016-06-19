@@ -15,14 +15,15 @@ const intent = (DOM) => {
   const forwardUp$ = mouseup(DOM.select(`#forward i`))
 
   return {
-    playing$: toggle(playPauseDown$),
+    playPause$: toggle(playPauseDown$),
     backwardHeld$: hold(backwardDown$, backwardUp$),
-    playPauseHeld: hold(playPauseDown$, playPauseUp$),
-    forwardHeld: hold(forwardDown$, forwardUp$),
+    playPauseHeld$: hold(playPauseDown$, playPauseUp$),
+    forwardHeld$: hold(forwardDown$, forwardUp$),
   }
 }
 
-const model = (actions) => combineLatestObj(actions)
+const model = ({playPause$, backwardHeld$, playPauseHeld$, forwardHeld$}, playing$) =>
+  combineLatestObj({playPause$, backwardHeld$, playPauseHeld$, forwardHeld$, playing$})
 
 const view = (state$) => state$.map(({playing, playPauseHeld, backwardHeld, forwardHeld}) => {
   const backwardColor = backwardHeld ? `.text-color-info` : ``
@@ -40,9 +41,18 @@ const view = (state$) => state$.map(({playing, playPauseHeld, backwardHeld, forw
   ])
 })
 
-const ControlsComponent = ({DOM}) => {
+const ControlsComponent = ({DOM, Playback}) => {
+  const playing$ = Playback.event$
+    .filter((event) => event.event === `playback_state_changed`)
+    .map((event) => {
+      if (event.new_state === `playing`)
+        return true
+      else
+        return false
+    }).startWith(false)
+
   const actions = intent(DOM)
-  const state$ = model(actions)
+  const state$ = model(actions, playing$)
   const vtree$ = view(state$)
 
   return {

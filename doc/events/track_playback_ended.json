@@ -1,0 +1,38 @@
+{
+    "time_position": 0,
+    "tl_track": {
+        "track": {
+            "album": {
+                "__model__": "Album",
+                "name": "So Wrong, It's Right",
+                "num_tracks": 12,
+                "artists": [{
+                    "__model__": "Artist",
+                    "musicbrainz_id": "62162215-b023-4f0e-84bd-1e9412d5b32c",
+                    "name": "All Time Low"
+                }],
+                "date": "2007-09-25",
+                "musicbrainz_id": "25079887-bb5b-4469-a1f3-e4ccc2fa21f0",
+                "num_discs": 1
+            },
+            "__model__": "Track",
+            "name": "Six Feet Under the Stars",
+            "disc_no": 1,
+            "uri": "local:track:All%20Time%20Low/So%20Wrong%2C%20It%27s%20Right/03-Six%20Feet%20Under%20the%20Stars.mp3",
+            "length": 216607,
+            "last_modified": 1408285306983,
+            "track_no": 3,
+            "artists": [{
+                "__model__": "Artist",
+                "musicbrainz_id": "62162215-b023-4f0e-84bd-1e9412d5b32c",
+                "name": "All Time Low"
+            }],
+            "genre": "Pop Punk",
+            "musicbrainz_id": "10296244-4b61-4d0d-9210-f1aef6c57147",
+            "bitrate": 207000
+        },
+        "__model__": "TlTrack",
+        "tlid": 9
+    },
+    "event": "track_playback_ended"
+}
