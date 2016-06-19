@@ -4,7 +4,7 @@ import {button, div, i} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 
 import {mouseup, mousedown} from '../../utils/cycle-event-helpers'
-import {toggle, hold} from '../../utils/cycle-mvi-helpers'
+import {bool, hold} from '../../utils/cycle-mvi-helpers'
 
 const intent = (DOM) => {
   const playPauseDown$ = mousedown(DOM.select(`#play-pause i`))
@@ -15,7 +15,7 @@ const intent = (DOM) => {
   const forwardUp$ = mouseup(DOM.select(`#forward i`))
 
   return {
-    playPause$: toggle(playPauseDown$),
+    playPause$: bool(playPauseDown$),
     backwardHeld$: hold(backwardDown$, backwardUp$),
     playPauseHeld$: hold(playPauseDown$, playPauseUp$),
     forwardHeld$: hold(forwardDown$, forwardUp$),
@@ -52,11 +52,29 @@ const ControlsComponent = ({DOM, Playback}) => {
     }).startWith(false)
 
   const actions = intent(DOM)
+
   const state$ = model(actions, playing$)
+
+  const control$ = actions.playPause$
+    .withLatestFrom(state$, (playPause, {playing}) => ({playPause, playing}))
+    .map(({playPause, playing}) => {
+      const command = playing ? {
+        jsonrpc: `2.0`,
+        id: 1,
+        method: `core.playback.pause`,
+      } : {
+        jsonrpc: `2.0`,
+        id: 1,
+        method: `core.playback.play`,
+      }
+      return playPause ? command : null
+    })
+
   const vtree$ = view(state$)
 
   return {
     DOM: vtree$,
+    Playback: control$,
   }
 }
 

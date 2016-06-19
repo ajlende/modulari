@@ -1,6 +1,17 @@
 import {Observable} from 'rx'
 
 /**
+ * bool - just maps events to their boolean value
+ *
+ * @param {Observable} event$ - any event stream
+ * @return Observable stream of true when there's an event
+ */
+const bool = (event$) =>
+  event$
+    .map((e) => Boolean(e))
+    .startWith(false)
+
+/**
  * toggle - toggles output event$ when there is a new event on the input event$
  *
  * @param {Observable} event$ - any event stream
@@ -34,4 +45,4 @@ const hold = (mouseDown$, mouseUp$) =>
 const rangeVal = (range$, first) =>
   range$.map((e) => e.target.value).startWith(first)
 
-export {toggle, hold, rangeVal}
+export {bool, toggle, hold, rangeVal}

@@ -29,16 +29,17 @@ const view = ({selector, controls, volume, nowPlaying, queue, search}) => Observ
 
 const HeaderComponent = ({DOM, Playback}) => {
   const selector = makeSelectorComponent({DOM}).DOM
-  const controls = makeControlsComponent({DOM, Playback}).DOM
+  const controls = makeControlsComponent({DOM, Playback})
   const volume = makeVolumeComponent({DOM}).DOM
   const nowPlaying = makeNowPlayingComponent({DOM}).DOM
   const queue = makeQueueComponent({DOM}).DOM
   const search = makeSearchComponent({DOM}).DOM
 
-  const vtree$ = view({selector, controls, volume, nowPlaying, queue, search})
+  const vtree$ = view({selector, controls: controls.DOM, volume, nowPlaying, queue, search})
 
   return {
     DOM: vtree$,
+    Playback: controls.Playback,
   }
 }
 
