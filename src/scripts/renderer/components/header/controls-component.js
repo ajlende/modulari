@@ -29,6 +29,9 @@ const model = ({playPause$, previous$, next$}, playback$) => ({
   playing$: isPlaying(playback$),
 })
 
+// TODO: combineLatestObj might be causing problems with the view when playPause$, next$, and
+// previous$ don't have an initial value. Try removing the startWith values and ternaries and
+// combineLatestObj to see if it reders properly then.
 const view = (data) => combineLatestObj(data).map(({playing}) => {
   const playPauseIcon = playing ? `.fa-pause` : `.fa-play`
 

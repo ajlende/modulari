@@ -31,7 +31,7 @@ const HeaderComponent = ({DOM, Playback}) => {
   const selector = makeSelectorComponent({DOM}).DOM
   const controls = makeControlsComponent({DOM, Playback})
   const volume = makeVolumeComponent({DOM}).DOM
-  const nowPlaying = makeNowPlayingComponent({DOM}).DOM
+  const nowPlaying = makeNowPlayingComponent({DOM, Playback}).DOM
   const queue = makeQueueComponent({DOM}).DOM
   const search = makeSearchComponent({DOM}).DOM
 
