@@ -31,11 +31,12 @@
  */
 
 import {Observable} from 'rx'
+import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
 /**
  * createRequest - formats the command and params passed to send to Mopidy
  *
- * @param {String} command - The command to send over the WebSocket
+ * @param {string} command - The command to send over the WebSocket
  * @param {Object} [params] - Optional parameters for the command
  */
 const createRequest = (command, params) => ({
@@ -77,7 +78,6 @@ const messageHandler = (ws) => (observable) => {
   // All Mopidy messages and errors go through onmessage
   ws.onmessage = (message) => {
     const data = JSON.parse(message.data)
-    console.log(`Mopidy message`, data)
     if (data.hasOwnProperty(`error`))
       observable.onError({type: `Mopidy`, error: data})
     else
@@ -176,20 +176,6 @@ const sendCommand = (ws) => (command) => {
   ws.send(commandStr)
 }
 
-// TODO Figure out how to know when an event is a response. For now, just always return false.
-const isPlaybackResponse = (res) => {
-  return res ? false : false
-}
-
-const isPlaybackEvent = (res) =>
-  res.hasOwnProperty(`event`) && (
-    res.event.indexOf(`playback`) !== -1 ||
-    res.event.indexOf(`seeked`) !== -1 ||
-    res.event.indexOf(`stream`) !== -1
-  )
-
-const isPlaybackMessage = (res) => isPlaybackEvent(res) || isPlaybackResponse(res)
-
 /**
  * sendCommand - Creates a Cycle.js Playback Driver for Mopidy
  *
@@ -199,8 +185,33 @@ const isPlaybackMessage = (res) => isPlaybackEvent(res) || isPlaybackResponse(re
 const makePlaybackDriver = (ws) => (command$) => {
   command$.subscribe(sendCommand(ws))
 
+  // Everything coming from the WebSocket
+  const ws$ = Observable.create(messageHandler(ws)).share()
+
+  // Only responses of commands packaged as an Object with response and command keys
+  const response$ = zipOneWayWithDefault(
+    ws$,
+    command$,
+    false, // false as default command for filtering below
+    (response, command) => ({response, command})
+  ).filter((e) => e.command) // not associated with a command
+
+  // Only playback events not associated with a command
+  const event$ = ws$.filter((res) =>
+    res.hasOwnProperty(`event`) && (
+      res.event.indexOf(`playback`) !== -1 ||
+      res.event.indexOf(`seeked`) !== -1 ||
+      res.event.indexOf(`stream`) !== -1
+    ))
+
+  // All events and responses of commands (easily filterable by (e) => e.hasOwnProperty(`command`))
+  const data$ = Observable.merge(event$, response$)
+
+  // Debug logging
+  data$.subscribe((e) => console.log(`Playback:`, e))
+
   return {
-    event$: Observable.create(messageHandler(ws)).share().filter(isPlaybackMessage),
+    data$,
     commands,
   }
 }

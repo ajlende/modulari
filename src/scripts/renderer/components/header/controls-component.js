@@ -42,7 +42,7 @@ const view = (data) => combineLatestObj(data).map(({playing}) => {
 })
 
 const ControlsComponent = ({DOM, Playback}) => {
-  const playback$ = Playback.event$
+  const playback$ = Playback.data$
   const actions = intent(DOM)
   const data = model(actions, playback$)
   const vtree$ = view(data)
