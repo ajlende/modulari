@@ -1,3 +1,4 @@
+import {Observable} from 'rx'
 import combineLatestObj from 'rx-combine-latest-obj'
 
 import {button, div, i} from '@cycle/dom'
@@ -32,11 +33,11 @@ const view = (data) => combineLatestObj(data).map(({playing}) => {
   const playPauseIcon = playing ? `.fa-pause` : `.fa-play`
 
   return div(`.controls`, [
-    button(`#backward.btn.btn-link.btn-sm`,
+    button(`#previous.btn.btn-link.btn-sm`,
       i(`.icon.fa.fa-fw.fa-backward`)),
     button(`#play-pause.btn.btn-link.btn-sm`,
       i(`.icon.fa.fa-fw.${playPauseIcon}`)),
-    button(`#forward.btn.btn-link.btn-sm`,
+    button(`#next.btn.btn-link.btn-sm`,
       i(`.icon.fa.fa-fw.fa-forward`)),
   ])
 })
@@ -47,16 +48,25 @@ const ControlsComponent = ({DOM, Playback}) => {
   const data = model(actions, playback$)
   const vtree$ = view(data)
 
-  const control$ = data.playPause$
+  // For now the ternary check in each is needed because Cycle.js requires initial values for
+  // everything, so default values of false are being set in the click() function in
+  // cycle-mvi-helpers. The ternary checks if it's the first command or not, basically.
+  const playPause$ = data.playPause$
     .withLatestFrom(data.playing$, (playPause, playing) => ({playPause, playing}))
     .map(({playPause, playing}) => {
       const command = playing ? Playback.commands.pause() : Playback.commands.play()
       return playPause ? command : null
     })
 
+  const next$ = data.next$
+    .map((next) => { return next ? Playback.commands.next() : null })
+
+  const previous$ = data.previous$
+    .map((previous) => { return previous ? Playback.commands.previous() : null })
+
   return {
     DOM: vtree$,
-    Playback: control$,
+    Playback: Observable.merge(playPause$, next$, previous$),
   }
 }
 
