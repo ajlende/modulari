@@ -16,12 +16,14 @@
   "dependencies": {
     "@cycle/core": "*",
     "@cycle/dom": "*",
+    "@cycle/isolate": "*",
     "babel-register": "*",
     "electron-debug": "*",
     "font-awesome": "*",
-    "furtive": "*",
-    "mopidy": "*",
+    "open-sans-fontface": "*",
     "rx": "*",
+    "rx-combine-latest-obj": "*",
+    "spectre.css": "*",
     "virtual-dom": "*"
   }
 }

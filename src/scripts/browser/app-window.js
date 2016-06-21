@@ -14,11 +14,10 @@ class AppWindow extends EventEmitter {
     const defaults = {
       'width': 1280,
       'height': 720,
+      'minWidth': 800,
+      'minHeight': 400,
       'web-preferences': {
-        'webaudio': true,
         'web-security': false,
-        'use-content-size': true,
-        'subpixel-font-scaling': true,
         'direct-write': true,
         'plugins': true
       }

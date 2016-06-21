@@ -1,10 +1,13 @@
+import {run} from '@cycle/core'
+import {makeDOMDriver} from '@cycle/dom'
 
-import {run} from '@cycle/core';
-import {makeDOMDriver} from '@cycle/dom';
-import makeMediaDriver from './drivers/mediadriver';
-import MediaComponent from './components/mediacomponent';
+import {makePlaybackDriver} from './drivers/mopidy/mopidy-driver'
 
-run(MediaComponent, {
-  DOM: makeDOMDriver('#app'),
-  Player: makeMediaDriver()
-});
+import PlayerComponent from './components/player-component'
+
+const ws = new WebSocket(`ws://localhost:6680/mopidy/ws`)
+
+run(PlayerComponent, {
+  DOM: makeDOMDriver(`body`),
+  Playback: makePlaybackDriver(ws),
+})

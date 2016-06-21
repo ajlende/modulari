@@ -11,6 +11,9 @@
   },
   "scripts": {
     "postinstall": "(cd src && npm install)",
+    "clean": "rm -rf node_modules && rm -rf src/node_modules",
+    "less": "lessc src/styles/less/modulari.less > src/styles/css/modulari.css",
+    "eslint": "eslint src/scripts/renderer",
     "start": "electron src"
   },
   "dependencies": {
@@ -21,8 +24,7 @@
     "babel-eslint": "*",
     "devtron": "*",
     "eslint": "*",
-    "eslint-config-xo-space": "*",
     "eslint-plugin-babel": "*",
-    "eslint-plugin-react": "*"
+    "less": "*"
   }
 }

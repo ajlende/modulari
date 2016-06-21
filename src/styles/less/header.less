@@ -1,0 +1,44 @@
+header {
+  // Separate the header from the body
+  border-bottom: .1rem solid @core-border-color;
+
+  // Align all buttons in the same line
+  .navbar-section {
+    div {
+      display: inline-block;
+    }
+  }
+
+  // Narrow up the control buttons by removing padding on the middle one
+  #play-pause {
+    padding: 0;
+  }
+
+  // Override the default form :focus behavior
+  .btn.btn-link {
+    &:focus {
+      color: @core-link-color;
+    }
+    // :active needed to be overridden as well because the active selector needs
+    // to be after the focus one
+    &:active {
+      color: darken(@core-link-color, 25%);
+    }
+  }
+
+  // Multi-line song name
+  // TODO: Fix the height of the header changing when a song starts
+  .now-playing {
+    display: block;
+    div {
+      display: block;
+      text-align: center;
+    }
+    .song-info {
+      strong {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+  }
+}
