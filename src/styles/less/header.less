@@ -25,4 +25,20 @@ header {
       color: darken(@core-link-color, 25%);
     }
   }
+
+  // Multi-line song name
+  // TODO: Fix the height of the header changing when a song starts
+  .now-playing {
+    display: block;
+    div {
+      display: block;
+      text-align: center;
+    }
+    .song-info {
+      strong {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+  }
 }

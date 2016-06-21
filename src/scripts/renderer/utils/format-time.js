@@ -1,6 +1,6 @@
 const pad = (char, n, s) => char.repeat(n - s.length) + s
 
-export default (t) => {
+const formatTime = (t) => {
   let s = t
   let m = s / 60|0
   s -= m * 60
@@ -13,3 +13,11 @@ export default (t) => {
 
   return `${hstr}${mstr}${sstr}`
 }
+
+const ms = (t) => {
+  const s = Math.floor(t / 1000)
+  return formatTime(s)
+}
+
+export default formatTime
+export {ms}

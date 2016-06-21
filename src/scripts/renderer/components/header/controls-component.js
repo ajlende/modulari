@@ -7,14 +7,11 @@ import isolate from '@cycle/isolate'
 import {click} from '../../utils/cycle-event-helpers'
 import {bool} from '../../utils/cycle-mvi-helpers'
 
-const isPlaying = (event$) =>
-  event$.filter((event) => event.event === `playback_state_changed`)
-    .map((event) => {
-      if (event.new_state === `playing`)
-        return true
-      else
-        return false
-    }).startWith(false)
+const isPlaying = (Playback) =>
+  Playback.data$
+    .filter((event) => event.event === `playback_state_changed`)
+    .map((event) => event.new_state === `playing`)
+    .startWith(false)
 
 const intent = (DOM) => ({
   playPause$: click(DOM.select(`#play-pause i`)),
@@ -22,11 +19,11 @@ const intent = (DOM) => ({
   next$: click(DOM.select(`#next i`)),
 })
 
-const model = ({playPause$, previous$, next$}, playback$) => ({
+const model = ({playPause$, previous$, next$}, Playback) => ({
   playPause$: bool(playPause$),
   previous$: bool(previous$),
   next$: bool(next$),
-  playing$: isPlaying(playback$),
+  playing$: isPlaying(Playback),
 })
 
 // TODO: combineLatestObj might be causing problems with the view when playPause$, next$, and
@@ -46,9 +43,8 @@ const view = (data) => combineLatestObj(data).map(({playing}) => {
 })
 
 const ControlsComponent = ({DOM, Playback}) => {
-  const playback$ = Playback.data$
   const actions = intent(DOM)
-  const data = model(actions, playback$)
+  const data = model(actions, Playback)
   const vtree$ = view(data)
 
   // For now the ternary check in each is needed because Cycle.js requires initial values for

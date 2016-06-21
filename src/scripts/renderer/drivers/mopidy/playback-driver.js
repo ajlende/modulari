@@ -183,7 +183,13 @@ const sendCommand = (ws) => (command) => {
  * @return The Playback Driver
  */
 const makePlaybackDriver = (ws) => (command$) => {
-  command$.subscribe(sendCommand(ws))
+  // Time position
+  // HACK: starting the timer after a second allows time for the websocket to connect
+  // HACK: x2 sending a getTimePosition command every second to keep track of song position
+  const timer$ = Observable.timer(1000, 1000).map(() => commands.getTimePosition())
+
+  // Send the commands including one every second for the timer
+  Observable.merge(command$, timer$).subscribe(sendCommand(ws))
 
   // Everything coming from the WebSocket
   const ws$ = Observable.create(messageHandler(ws)).share()
@@ -194,7 +200,7 @@ const makePlaybackDriver = (ws) => (command$) => {
     command$,
     false, // false as default command for filtering below
     (response, command) => ({response, command})
-  ).filter((e) => e.command) // not associated with a command
+  ).filter((e) => e.command) // e.command === false -> not associated with a command
 
   // Only playback events not associated with a command
   const event$ = ws$.filter((res) =>
@@ -205,13 +211,27 @@ const makePlaybackDriver = (ws) => (command$) => {
     ))
 
   // All events and responses of commands (easily filterable by (e) => e.hasOwnProperty(`command`))
+  // Does not include the timer responses
   const data$ = Observable.merge(event$, response$)
 
   // Debug logging
   data$.subscribe((e) => console.log(`Playback:`, e))
 
+  // HACK: x3 get the position with lots of filtering to make sure it's the correct response
+  const position$ = zipOneWayWithDefault(ws$, timer$, false,
+    (response, command) => ({response, command}))
+    .filter((e) =>
+      e.command &&
+      e.command.hasOwnProperty(`method`) &&
+      e.command.method.indexOf(`get_time_position`) !== -1 &&
+      e.response &&
+      e.response.hasOwnProperty(`result`) &&
+      Number.isInteger(e.response.result))
+    .map((e) => e.response.result)
+
   return {
     data$,
+    position$,
     commands,
   }
 }
