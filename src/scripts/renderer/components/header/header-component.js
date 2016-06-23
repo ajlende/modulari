@@ -27,10 +27,10 @@ const view = ({selector, controls, volume, nowPlaying, queue, search}) => Observ
   ])
 )
 
-const HeaderComponent = ({DOM, Playback}) => {
+const HeaderComponent = ({DOM, Playback, Mixer}) => {
   const {DOM: selector} = makeSelectorComponent({DOM})
   const {DOM: controls, Playback: playback$} = makeControlsComponent({DOM, Playback})
-  const {DOM: volume} = makeVolumeComponent({DOM})
+  const {DOM: volume, Mixer: mixer$} = makeVolumeComponent({DOM, Mixer})
   const {DOM: nowPlaying} = makeNowPlayingComponent({DOM, Playback})
   const {DOM: queue} = makeQueueComponent({DOM})
   const {DOM: search} = makeSearchComponent({DOM})
@@ -40,6 +40,7 @@ const HeaderComponent = ({DOM, Playback}) => {
   return {
     DOM: vtree$,
     Playback: playback$,
+    Mixer: mixer$,
   }
 }
 
