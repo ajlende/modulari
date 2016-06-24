@@ -19,7 +19,7 @@
 import {Observable} from 'rx'
 import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
-import {createRequest, sendCommand, messageHandler} from './mopidy-driver'
+import {createRequest} from './mopidy-driver'
 
 /**
  * commands - Create commands that can be sent to Mopidy to control it
@@ -39,10 +39,8 @@ const commands = {
  * @param {Object} ws - the Mopidy WebSocket
  * @return The Mixer Driver
  */
-const makeMixerDriver = (ws) => (command$) => {
-  command$.subscribe(sendCommand(ws))
-
-  const ws$ = Observable.create(messageHandler(ws)).share()
+const makeMixerDriver = (sendCommand, ws$) => (command$) => {
+  command$.subscribe(sendCommand)
 
   const response$ = zipOneWayWithDefault(
     ws$,

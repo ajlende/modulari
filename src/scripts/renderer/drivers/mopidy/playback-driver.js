@@ -33,7 +33,7 @@
 import {Observable} from 'rx'
 import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
-import {createRequest, sendCommand, messageHandler} from './mopidy-driver'
+import {createRequest} from './mopidy-driver'
 
 /**
  * commands - Create commands that can be sent to Mopidy to control it
@@ -63,17 +63,14 @@ const commands = {
  * @param {Object} ws - the Mopidy WebSocket
  * @return The Playback Driver
  */
-const makePlaybackDriver = (ws) => (command$) => {
+const makePlaybackDriver = (sendCommand, ws$) => (command$) => {
   // Time position
   // HACK: starting the timer after a second allows time for the websocket to connect
   // HACK: x2 sending a getTimePosition command every second to keep track of song position
   const timer$ = Observable.timer(1000, 1000).map(() => commands.getTimePosition())
 
   // Send the commands including one every second for the timer
-  Observable.merge(command$, timer$).subscribe(sendCommand(ws))
-
-  // Everything coming from the WebSocket
-  const ws$ = Observable.create(messageHandler(ws)).share()
+  Observable.merge(command$, timer$).subscribe(sendCommand)
 
   // Only responses of commands packaged as an Object with response and command keys
   const response$ = zipOneWayWithDefault(
