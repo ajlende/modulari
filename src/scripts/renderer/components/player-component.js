@@ -3,20 +3,20 @@ import isolate from '@cycle/isolate'
 import {div} from '@cycle/dom'
 
 import makeHeaderComponent from './header/header-component'
-import makeFormComponent from './sample-form-component'
+import makeContentComponent from './content/content-component'
 
-const view = ({header, form}) => Observable.just(
+const view = ({header, content}) => Observable.just(
   div(`.wrapper`, [
     header,
-    form,
+    content,
   ])
 )
 
-  const form = makeFormComponent({DOM}).DOM
 const PlayerComponent = ({DOM, Playback, Mixer}) => {
   const header = makeHeaderComponent({DOM, Playback, Mixer})
+  const content = makeContentComponent({DOM, Playback}).DOM
 
-  const vtree$ = view({header: header.DOM, form})
+  const vtree$ = view({header: header.DOM, content})
 
   return {
     DOM: vtree$,
