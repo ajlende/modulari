@@ -2,31 +2,34 @@
  * PlaybackController - Handles commands and events related to playback in Mopidy
  *
  * Controls the following in Mopidy:
- * - play      (tl_track=None, tlid=None) -> Null
- * - next      () -> Null
- * - previous  () -> Null
- * - stop      () -> Null
- * - pause     () -> Null
- * - resume    () -> Null
- * - seek      (time_position:Number) -> Boolean: true if successful, else false)
- * - set_state (new_state:String) -> Null
- * - get_state () -> String: one of {playing, paused, stopped}
- * - get_current_tl_track () -> TlTrack: current track (TlTrack contains a Track)
- * - get_current_track    () -> Track: current track (just the Track part of TlTrack)
- * - get_stream_title     () -> String or Null: stream title or null
- * - get_time_position    () -> Number: in milliseconds
+ * - play(tl_track:Track, tlid:int)-> {null}
+ * - next() ------------------------> {null}
+ * - previous() --------------------> {null}
+ * - stop() ------------------------> {null}
+ * - pause() -----------------------> {null}
+ * - resume() ----------------------> {null}
+ * - seek(time_position:int) -------> {boolean} true if successful, else false
+ * - get_current_tl_track() --------> {TlTrack} current tlTrack
+ * - get_current_track() -----------> {Track}   current track
+ * - get_stream_title() ------------> {string}  stream title
+ * - get_time_position() -----------> {number}  position in milliseconds
+ * - get_state() -------------------> {string}  playing|paused|stopped
+ * - set_state(new_state:string) ---> {null}
  *
  * Handles the following events from Mopdidy:
- * - playback_state_changed (old_state, new_state)
- * - seeked                 (time_position)
- * - stream_title_changed   (title)
- * - track_playback_ended   (tl_track, time_position)
- * - track_playback_paused  (tl_track, time_position)
- * - track_playback_resumed (tl_track, time_position)
- * - track_playback_started (tl_track)
+ * - playback_state_changed --------> {old_state:string, new_state:string}
+ * - seeked ------------------------> {time_position:number}
+ * - stream_title_changed ----------> {title:string}
+ * - track_playback_ended ----------> {tl_track:TlTrack, time_position:number}
+ * - track_playback_paused ---------> {tl_track:TlTrack, time_position:number}
+ * - track_playback_resumed --------> {tl_track:TlTrack, time_position:number}
+ * - track_playback_started --------> {tl_track:TlTrack}
+ *
+ * NOTE: `int` refers to a 32-bit Integer that can be acquired using `number|0`.
+ *       Passing in a regular number WILL NOT WORK!!!
  *
  * Mopify API Reference:
- * http://mopidy.readthedocs.io/en/latest/api/core/#playback-controller
+ * https://docs.mopidy.com/en/latest/api/core/#playback-controller
  * https://docs.mopidy.com/en/latest/api/core/#core-events
  */
 
