@@ -103,10 +103,10 @@ const messageHandler = (ws) => (observable) => {
  * @param {string} command - The command to send over the WebSocket
  * @param {Object} [params] - Optional parameters for the command
  */
-const createRequest = (command, params) => ({
+const createRequest = (scope, command, params) => ({
   jsonrpc: `2.0`,
   id: 1,
-  method: `core.playback.${command}`,
+  method: `core.${scope}.${command}`,
   params: params || {},
 })
 

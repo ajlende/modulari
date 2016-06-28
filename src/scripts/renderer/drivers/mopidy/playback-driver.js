@@ -38,26 +38,28 @@ import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
 import {createRequest} from './mopidy-driver'
 
+const createPlaybackRequest = (command, params) => createRequest(`playback`, command, params)
+
 /**
  * commands - Create commands that can be sent to Mopidy to control it
  *
  * See the Mopidy API for params
  */
 const commands = {
-  play: () => createRequest(`play`),
-  next: () => createRequest(`next`),
-  previous: () => createRequest(`previous`),
-  stop: () => createRequest(`stop`),
-  pause: () => createRequest(`pause`),
-  resume: () => createRequest(`resume`),
-  seek: (position) => createRequest(`seek`, {time_position: position}),
-  setState: (state) => createRequest(`set_state`, {new_state: state}),
-  getState: () => createRequest(`get_state`),
-  getCurrentTlTrack: () => createRequest(`get_current_tl_track`),
-  getCurrentTlid: () => createRequest(`get_current_tlid`),
-  getCurrentTrack: () => createRequest(`get_current_track`),
-  getStreamTitle: () => createRequest(`get_stream_title`),
-  getTimePosition: () => createRequest(`get_time_position`),
+  play: () => createPlaybackRequest(`play`),
+  next: () => createPlaybackRequest(`next`),
+  previous: () => createPlaybackRequest(`previous`),
+  stop: () => createPlaybackRequest(`stop`),
+  pause: () => createPlaybackRequest(`pause`),
+  resume: () => createPlaybackRequest(`resume`),
+  seek: (position) => createPlaybackRequest(`seek`, {time_position: position}),
+  setState: (state) => createPlaybackRequest(`set_state`, {new_state: state}),
+  getState: () => createPlaybackRequest(`get_state`),
+  getCurrentTlTrack: () => createPlaybackRequest(`get_current_tl_track`),
+  getCurrentTlid: () => createPlaybackRequest(`get_current_tlid`),
+  getCurrentTrack: () => createPlaybackRequest(`get_current_track`),
+  getStreamTitle: () => createPlaybackRequest(`get_stream_title`),
+  getTimePosition: () => createPlaybackRequest(`get_time_position`),
 }
 
 /**

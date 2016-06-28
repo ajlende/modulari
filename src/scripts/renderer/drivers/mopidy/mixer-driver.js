@@ -21,16 +21,18 @@ import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
 import {createRequest} from './mopidy-driver'
 
+const createMixerRequest = (command, params) => createRequest(`mixer`, command, params)
+
 /**
  * commands - Create commands that can be sent to Mopidy to control it
  *
  * See the Mopidy API for params
  */
 const commands = {
-  getMute: () => createRequest(`get_mute`),
-  getVolume: () => createRequest(`get_volume`),
-  setMute: (mute) => createRequest(`set_mute`, {mute: mute|0}),
-  setVolume: (volume) => createRequest(`set_volume`, {volume: volume|0}),
+  getMute: () => createMixerRequest(`get_mute`),
+  getVolume: () => createMixerRequest(`get_volume`),
+  setMute: (mute) => createMixerRequest(`set_mute`, {mute: mute|0}),
+  setVolume: (volume) => createMixerRequest(`set_volume`, {volume: volume|0}),
 }
 
 /**
