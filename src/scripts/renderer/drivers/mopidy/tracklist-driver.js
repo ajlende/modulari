@@ -52,38 +52,40 @@ import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
 import {createRequest} from './mopidy-driver'
 
+const createTracklistRequest = (command, params) => createRequest(`tracklist`, command, params)
+
 /**
  * commands - Create commands that can be sent to Mopidy to control it
  *
  * See the Mopidy API for params
  */
 const commands = {
-  add: (uris, at_position) => createRequest(`add`, {uris, at_position}),
-  remove: (criteria) => createRequest(`remove`, {criteria}),
-  clear: () => createRequest(`clear`),
-  move: (start, end, to_position) => createRequest(`move`, {start, end, to_position}),
-  shuffle: (start, end) => createRequest(`shuffle`, {start, end}),
-  getTlTracks: () => createRequest(`get_tl_tracks`),
-  index: (tl_track, tlid) => createRequest(`index`, {tl_track, tlid}),
-  getVersion: () => createRequest(`get_version`),
-  getLength: () => createRequest(`get_length`),
-  getTracks: () => createRequest(`get_tracks`),
-  slice: (start, end) => createRequest(`slice`, {start, end}),
-  filter: (criteria) => createRequest(`filter`, {criteria}),
-  getEotTlid: () => createRequest(`get_eot_tlid`),
-  getNextTlid: () => createRequest(`get_next_tlid`),
-  getPreviousTlid: () => createRequest(`get_previous_tlid`),
-  eotTrack: (tl_track) => createRequest(`eot_track`, {tl_track}),
-  nextTrack: (tl_track) => createRequest(`next_track`, {tl_track}),
-  previousTrack: (tl_track) => createRequest(`previous_track`, {tl_track}),
-  getConsume: () => createRequest(`get_consume`),
-  setConsume: (value) => createRequest(`set_consume`, {value}),
-  getRandom: () => createRequest(`get_random`),
-  setRandom: (value) => createRequest(`set_random`, {value}),
-  getRepeat: () => createRequest(`get_repeat`),
-  setRepeat: (value) => createRequest(`set_repeat`, {value}),
-  getSingle: () => createRequest(`get_single`),
-  setSingle: (value) => createRequest(`set_single`, {value}),
+  add: (uris, at_position) => createTracklistRequest(`add`, {uris, at_position}),
+  remove: (criteria) => createTracklistRequest(`remove`, {criteria}),
+  clear: () => createTracklistRequest(`clear`),
+  move: (start, end, to_position) => createTracklistRequest(`move`, {start, end, to_position}),
+  shuffle: (start, end) => createTracklistRequest(`shuffle`, {start, end}),
+  getTlTracks: () => createTracklistRequest(`get_tl_tracks`),
+  index: (tl_track, tlid) => createTracklistRequest(`index`, {tl_track, tlid}),
+  getVersion: () => createTracklistRequest(`get_version`),
+  getLength: () => createTracklistRequest(`get_length`),
+  getTracks: () => createTracklistRequest(`get_tracks`),
+  slice: (start, end) => createTracklistRequest(`slice`, {start, end}),
+  filter: (criteria) => createTracklistRequest(`filter`, {criteria}),
+  getEotTlid: () => createTracklistRequest(`get_eot_tlid`),
+  getNextTlid: () => createTracklistRequest(`get_next_tlid`),
+  getPreviousTlid: () => createTracklistRequest(`get_previous_tlid`),
+  eotTrack: (tl_track) => createTracklistRequest(`eot_track`, {tl_track}),
+  nextTrack: (tl_track) => createTracklistRequest(`next_track`, {tl_track}),
+  previousTrack: (tl_track) => createTracklistRequest(`previous_track`, {tl_track}),
+  getConsume: () => createTracklistRequest(`get_consume`),
+  setConsume: (value) => createTracklistRequest(`set_consume`, {value}),
+  getRandom: () => createTracklistRequest(`get_random`),
+  setRandom: (value) => createTracklistRequest(`set_random`, {value}),
+  getRepeat: () => createTracklistRequest(`get_repeat`),
+  setRepeat: (value) => createTracklistRequest(`set_repeat`, {value}),
+  getSingle: () => createTracklistRequest(`get_single`),
+  setSingle: (value) => createTracklistRequest(`set_single`, {value}),
 }
 
 /**
