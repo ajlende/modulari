@@ -12,16 +12,20 @@ const view = ({header, content}) => Observable.just(
   ])
 )
 
-const PlayerComponent = ({DOM, Playback, Mixer}) => {
+const PlayerComponent = ({DOM, Playback, Mixer, Tracklist}) => {
   const header = makeHeaderComponent({DOM, Playback, Mixer})
-  const content = makeContentComponent({DOM, Playback}).DOM
+  const content = makeContentComponent({Tracklist, Playback})
 
-  const vtree$ = view({header: header.DOM, content})
+  const vtree$ = view({
+    header: header.DOM,
+    content: content.DOM,
+  })
 
   return {
     DOM: vtree$,
     Playback: header.Playback,
     Mixer: header.Mixer,
+    Tracklist: content.Tracklist,
   }
 }
 

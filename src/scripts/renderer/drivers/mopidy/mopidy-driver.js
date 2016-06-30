@@ -122,7 +122,7 @@ const sendCommand = (ws) => (command) => {
   ws.send(commandStr)
 }
 
-// export {default as TracklistDriver} from './tracklist-driver'
+export {default as makeTracklistDriver} from './tracklist-driver'
 export {default as makePlaybackDriver} from './playback-driver'
 // export {default as makeLibraryDriver} from './library-driver'
 // export {default as makePlaylistDriver} from './playlist-driver'

@@ -5,6 +5,7 @@ import {Observable} from 'rx'
 
 import {
   makePlaybackDriver,
+  makeTracklistDriver,
   makeMixerDriver,
   messageHandler,
   sendCommand as makeSendCommand,
@@ -19,5 +20,6 @@ const sendCommand = makeSendCommand(ws)
 run(PlayerComponent, {
   DOM: makeDOMDriver(`body`),
   Playback: makePlaybackDriver(sendCommand, ws$),
+  Tracklist: makeTracklistDriver(sendCommand, ws$),
   Mixer: makeMixerDriver(sendCommand, ws$),
 })

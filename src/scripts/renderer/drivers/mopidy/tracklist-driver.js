@@ -48,7 +48,7 @@
  */
 
 import {Observable} from 'rx'
-import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
+// import {zipOneWayWithDefault} from '../../utils/rx-zip-one-way'
 
 import {createRequest} from './mopidy-driver'
 
@@ -95,12 +95,19 @@ const commands = {
  * @return The Tracklist Driver
  */
 const makeTracklistDriver = (sendCommand, ws$) => (command$) => {
-  const response$ = zipOneWayWithDefault(
-    ws$,
-    command$,
-    false,
-    (response, command) => ({response, command})
-  ).filter((e) => e.command)
+  command$.subscribe(sendCommand)
+
+  // const response$ = zipOneWayWithDefault(
+  //   ws$,
+  //   command$,
+  //   false,
+  //   (response, command) => ({response, command})
+  // ).filter((e) => e.command)
+
+  // HACK: Just to get it working really quickly, filter responses for get_tl_tracks like this
+  const response$ = ws$
+    .filter((event) => event.result && Array.isArray(event.result))
+    .map((event) => ({response: event.result, command: `get_tl_tracks`}))
 
   const event$ = ws$.filter((res) =>
     res.hasOwnProperty(`event`) && (
