@@ -42,15 +42,18 @@ const view = (state$) => state$
     ])
   })
 
-const SelectorComponent = ({DOM}) => {
+const VolumeComponent = ({DOM, Mixer}) => {
   const actions = intent(DOM)
   const state$ = model(actions)
   const vtree$ = view(state$)
 
+  const mixer$ = state$.map(({volValue}) => Mixer.commands.setVolume(volValue))
+
   return {
     DOM: vtree$,
+    Mixer: mixer$,
   }
 }
 
-export default (sources) => isolate(SelectorComponent)(sources)
-export {intent, model, view, SelectorComponent}
+export default (sources) => isolate(VolumeComponent)(sources)
+export {intent, model, view, VolumeComponent}
