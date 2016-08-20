@@ -1,3 +1,10 @@
+# NPM
 node_modules
 *.log
-src/styles/css/modulari.css
+
+# Elm
+elm-stuff
+repl-temp-*
+
+# App
+app

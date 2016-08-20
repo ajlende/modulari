@@ -10,7 +10,7 @@ class AppMenu extends EventEmitter {
     super();
 
     // Read the template json
-    const template = require(`../../menus/${process.platform}.json`);
+    const template = require(`./menus/${process.platform}.json`);
 
     // Set handlers and create the menu
     this.wireUpCommands(template);

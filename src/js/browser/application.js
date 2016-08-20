@@ -29,7 +29,7 @@ class Application extends EventEmitter {
 
     // Create and show the main window
     this.mainWindow = new AppWindow();
-    this.mainWindow.loadURL(`file://${path.resolve(__dirname, '..', '..', 'html', 'default.html')}`);
+    this.mainWindow.loadURL(`file://${path.resolve(__dirname, 'index.html')}`);
   }
 
   /**
@@ -41,10 +41,12 @@ class Application extends EventEmitter {
     const menu = new AppMenu();
 
     // Handle application events
-    menu.on('application:quit', ::app.quit);
+    menu.on('application:quit', function() {
+      app.quit();
+    });
 
     menu.on('application:show-settings', function () {
-
+      // TODO
     });
 
     menu.on('application:open-url', function (menuItem) {
