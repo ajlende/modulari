@@ -7,11 +7,11 @@
   "scripts": {
     "postinstall": "elm package install",
     "clean": "rm -rf node_modules; rm -rf elm-stuff; rm -rf app",
-    "electron": "rollup src/js/browser/index.js --output app/index.js --format cjs",
-    "elm": "elm make src/Main.elm --output=app/app.js",
+    "electron": "rollup src/browser/index.js --output app/index.js --format cjs",
+    "elm": "elm make src/renderer/Main.elm --output=app/app.js",
     "less": "lessc src/less/modulari.less app/styles/modulari.css",
     "copy": "cp src/ports.js app/ports.js && cp src/index.html app/index.html && cp -r src/menus app/menus && cp node_modules/font-awesome/css/font-awesome.css app/styles/font-awesome.css",
-    "build": "mkdir -p app/styles app/js && npm run copy && npm run less && npm run elm && npm run electron",
+    "build": "mkdir -p app/styles && npm run copy && npm run less && npm run elm && npm run electron",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron app"
   },
@@ -26,16 +26,16 @@
   },
   "homepage": "https://github.com/ajlende/modulari#readme",
   "devDependencies": {
-    "electron": "^1.3.3",
+    "electron": "^1.4.2",
     "electron-debug": "^1.0.1",
-    "electron-prebuilt": "^1.3.3",
+    "electron-prebuilt": "^1.4.2",
     "elm": "^0.17.1",
     "less": "^2.7.1",
-    "rollup": "^0.34.10"
+    "rollup": "^0.34.13"
   },
   "dependencies": {
     "font-awesome": "^4.6.3",
     "open-sans-fontface": "^1.4.0",
-    "spectre.css": "^0.1.25"
+    "spectre.css": "^0.1.27"
   }
 }
