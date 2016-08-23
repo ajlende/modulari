@@ -4,6 +4,24 @@
   "version": "0.0.1",
   "description": "A Mopidy client built with Electron and the Elm programming language",
   "main": "dist/main.js",
+  "watch": {
+    "electron": {
+      "patterns": ["src/browser"],
+      "extensions": "js"
+    },
+    "elm": {
+      "patterns": ["src/renderer"],
+      "extensions": "elm"
+    },
+    "less": {
+      "patterns": ["src/less"],
+      "extensions": "less"
+    },
+    "copy": {
+      "patterns": ["src", "src/menus"],
+      "extensions": "html,json,js"
+    }
+  },
   "scripts": {
     "postinstall": "elm package install",
     "clean": "rm -rf node_modules; rm -rf elm-stuff; rm -rf app",
@@ -13,7 +31,8 @@
     "copy": "cp src/ports.js app/ports.js && cp src/index.html app/index.html && cp -r src/menus app/menus && cp node_modules/font-awesome/css/font-awesome.css app/styles/font-awesome.css",
     "build": "mkdir -p app/styles && npm run copy && npm run less && npm run elm && npm run electron",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron app"
+    "start": "electron app",
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -31,7 +50,8 @@
     "electron-prebuilt": "^1.4.2",
     "elm": "^0.17.1",
     "less": "^2.7.1",
-    "rollup": "^0.34.13"
+    "rollup": "^0.36.1",
+    "npm-watch": "^0.1.6"
   },
   "dependencies": {
     "font-awesome": "^4.6.3",
