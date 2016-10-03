@@ -26,7 +26,7 @@
     "postinstall": "elm package install",
     "clean": "rm -rf node_modules; rm -rf elm-stuff; rm -rf app",
     "electron": "rollup src/browser/index.js --output app/index.js --format cjs",
-    "elm": "elm make src/renderer/Main.elm --output=app/app.js",
+    "elm": "elm make src/renderer/App.elm --output=app/app.js",
     "less": "lessc src/less/modulari.less app/styles/modulari.css",
     "copy": "cp src/ports.js app/ports.js && cp src/index.html app/index.html && cp -r src/menus app/menus && cp node_modules/font-awesome/css/font-awesome.css app/styles/font-awesome.css",
     "build": "mkdir -p app/styles && npm run copy && npm run less && npm run elm && npm run electron",

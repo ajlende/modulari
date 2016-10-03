@@ -6,7 +6,10 @@
     "source-directories": [
         "src/renderer"
     ],
-    "exposed-modules": [],
+    "exposed-modules": [
+        "Mopidy.DataModels",
+        "Mopidy.CoreEvents"
+    ],
     "dependencies": {
         "NoRedInk/elm-decode-pipeline": "2.0.0 <= v < 3.0.0",
         "elm-lang/core": "4.0.5 <= v < 5.0.0",
