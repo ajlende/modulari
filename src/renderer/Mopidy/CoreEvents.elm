@@ -1,8 +1,8 @@
-module Mopidy.CoreEvents
+port module Mopidy.CoreEvents
     exposing
-        ( PlaybackState
-        , MopidyEvent
+        ( MopidyCoreEvent(..)
         , mopidyEvent
+        , decodeMopidyEvent
         )
 
 {-| A collection of Mopidy Core Events
@@ -11,52 +11,20 @@ module Mopidy.CoreEvents
 
 # Mopidy Core Events
 
-@docs PlaybackState, MopidyEvent
+@docs MopidyCoreEvent
 
 ## Decoding Mopidy Core Events
 
 @docs mopidyEvent
+
+### Helper Decoders
+
+@docs decodeMopidyEvent
 -}
 
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Mopidy.DataModels exposing (..)
-
-
-{-| A union type of all possible states that playback can be in.
-
-One of `Stopped`, `Playing`, `Paused`, or `Unknown`.
--}
-type PlaybackState
-    = Stopped
-    | Playing
-    | Paused
-    | Unknown
-
-
-{-| (Private) Converts a string to a PlaybackState
--}
-playbackState : String -> PlaybackState
-playbackState state =
-    case state of
-        "STOPPED" ->
-            Stopped
-
-        "PLAYING" ->
-            Playing
-
-        "PAUSED" ->
-            Paused
-
-        _ ->
-            Unknown
-
-
-{-| (Private) Converts a String to a Decoder for PlaybackState
--}
-decodePlaybackState : String -> Decoder PlaybackState
-decodePlaybackState str =
-    decode (playbackState str)
 
 
 {-| Union type for all event messages that may come from Mopidy.
@@ -186,7 +154,7 @@ Arguments:
 
 > `String` title - The new stream title.
 -}
-type MopidyEvent
+type MopidyCoreEvent
     = MuteChanged Bool
     | OptionsChanged
     | PlaybackStateChanged PlaybackState PlaybackState
@@ -221,15 +189,15 @@ Which should become
     PlaybackStateChanged PlaybackState.Playing PlaybackState.Paused
 
 -}
-mopidyEvent : Decoder MopidyEvent
+mopidyEvent : Decoder MopidyCoreEvent
 mopidyEvent =
     ("event" := string) `andThen` decodeMopidyEvent
 
 
-{-| (Private) Selects the proper decoder for a Mopidy event from the
+{-| Selects the proper decoder for a Mopidy event from the
 event string.
 -}
-decodeMopidyEvent : String -> Decoder MopidyEvent
+decodeMopidyEvent : String -> Decoder MopidyCoreEvent
 decodeMopidyEvent event =
     case event of
         "mute_changed" ->

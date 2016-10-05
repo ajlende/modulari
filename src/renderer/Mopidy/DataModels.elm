@@ -1,6 +1,7 @@
 module Mopidy.DataModels
     exposing
-        ( RefType
+        ( PlaybackState(..)
+        , RefType(..)
         , Ref
         , Track
         , Album
@@ -8,6 +9,8 @@ module Mopidy.DataModels
         , Playlist
         , TlTrack
         , SearchResult
+        , decodePlaybackState
+        , decodeRefType
         , ref
         , track
         , album
@@ -25,7 +28,7 @@ default values where they are used.
 
 [Mopidy Docs](https://docs.mopidy.com/en/latest/api/models/)
 
-@docs RefType, Ref, Track, Album, Artist, Playlist, TlTrack, SearchResult
+@docs PlaybackState, RefType, Ref, Track, Album, Artist, Playlist, TlTrack, SearchResult
 
 ## Decoding from JSON
 
@@ -53,6 +56,10 @@ Which should become
 
 @docs ref, track, album, artist, playlist, tlTrack, searchResult
 
+### Helper Decoders
+
+@docs decodePlaybackState, decodeRefType
+
 ## Encoding to Json
 
     -- TODO
@@ -62,7 +69,46 @@ import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
 
+{-| A union type of all possible states that playback can be in.
+
+One of `Stopped`, `Playing`, `Paused`, or `UnknownState`.
+-}
+type PlaybackState
+    = Stopped
+    | Playing
+    | Paused
+    | UnknownState
+
+
+{-| (Private) Converts a string to a PlaybackState
+-}
+playbackState : String -> PlaybackState
+playbackState state =
+    case state of
+        "STOPPED" ->
+            Stopped
+
+        "PLAYING" ->
+            Playing
+
+        "PAUSED" ->
+            Paused
+
+        _ ->
+            UnknownState
+
+
+{-| Converts a String to a Decoder for PlaybackState
+-}
+decodePlaybackState : String -> Decoder PlaybackState
+decodePlaybackState str =
+    decode (playbackState str)
+
+
 {-| Union type for different URI reference types. Used within a Ref.
+
+One of `AlbumRef`, `ArtistRef`, `DirectoryRef`, `PlaylistRef`, `TrackRef`, or
+`UnknownRef`
 -}
 type RefType
     = AlbumRef
@@ -70,7 +116,7 @@ type RefType
     | DirectoryRef
     | PlaylistRef
     | TrackRef
-    | Unknown
+    | UnknownRef
 
 
 {-| (Private) Converts a string to a RefType.
@@ -94,10 +140,10 @@ refType str =
             TrackRef
 
         _ ->
-            Unknown
+            UnknownRef
 
 
-{-| (Private) Decodes a string into a RefType.
+{-| Decodes a string into a RefType.
 -}
 decodeRefType : String -> Decoder RefType
 decodeRefType str =

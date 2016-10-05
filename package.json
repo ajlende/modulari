@@ -6,19 +6,28 @@
   "main": "dist/main.js",
   "watch": {
     "electron": {
-      "patterns": ["src/browser"],
+      "patterns": [
+        "src/browser"
+      ],
       "extensions": "js"
     },
     "elm": {
-      "patterns": ["src/renderer"],
+      "patterns": [
+        "src/renderer"
+      ],
       "extensions": "elm"
     },
     "less": {
-      "patterns": ["src/less"],
+      "patterns": [
+        "src/less"
+      ],
       "extensions": "less"
     },
     "copy": {
-      "patterns": ["src", "src/menus"],
+      "patterns": [
+        "src",
+        "src/menus"
+      ],
       "extensions": "html,json,js"
     }
   },
@@ -55,6 +64,7 @@
   },
   "dependencies": {
     "font-awesome": "^4.6.3",
+    "mopidy": "^0.5.0",
     "open-sans-fontface": "^1.4.0",
     "spectre.css": "^0.1.27"
   }
