@@ -219,9 +219,9 @@ ref =
 type alias Track =
     { uri : String
     , name : String
-    , artists : Maybe (List Artist)
-    , album : Maybe Album
-    , composers : Maybe String
+    , artists : List Artist
+    , album : Album
+    , composers : Maybe (List Artist)
     , performers : Maybe String
     , genre : Maybe String
     , trackNum : Maybe Int
@@ -242,19 +242,19 @@ track =
     decode Track
         |> required "uri" string
         |> required "name" string
-        |> required "artists" (nullable (list artist))
-        |> required "album" (nullable album)
-        |> required "composers" (nullable string)
-        |> required "performers" (nullable string)
-        |> required "genre" (nullable string)
-        |> required "trackNum" (nullable int)
-        |> required "discNum" (nullable int)
-        |> required "date" (nullable string)
-        |> required "duration" (nullable int)
-        |> required "bitrate" (nullable int)
-        |> required "comment" (nullable string)
-        |> required "musicbrainzID" (nullable string)
-        |> required "lastModified" (nullable int)
+        |> optional "artists" (list artist) [ unknownArtist ]
+        |> optional "album" album unknownAlbum
+        |> optional "composers" (nullable (list artist)) Nothing
+        |> optional "performers" (nullable string) Nothing
+        |> optional "genre" (nullable string) Nothing
+        |> optional "trackNum" (nullable int) Nothing
+        |> optional "discNum" (nullable int) Nothing
+        |> optional "date" (nullable string) Nothing
+        |> optional "duration" (nullable int) Nothing
+        |> optional "bitrate" (nullable int) Nothing
+        |> optional "comment" (nullable string) Nothing
+        |> optional "musicbrainzID" (nullable string) Nothing
+        |> optional "lastModified" (nullable int) Nothing
 
 
 {-| Type model for Mopidy Album.
@@ -281,9 +281,22 @@ type alias Album =
     , artists : List Artist
     , numTracks : Maybe Int
     , numDiscs : Maybe Int
-    , date : String
-    , musicbrainzID : String
-    , images : List String
+    , date : Maybe String
+    , musicbrainzID : Maybe String
+    , images : Maybe (List String)
+    }
+
+
+unknownAlbum : Album
+unknownAlbum =
+    { uri = ""
+    , name = "Unknown Album"
+    , artists = [ unknownArtist ]
+    , numTracks = Nothing
+    , numDiscs = Nothing
+    , date = Nothing
+    , musicbrainzID = Nothing
+    , images = Nothing
     }
 
 
@@ -292,14 +305,14 @@ type alias Album =
 album : Decoder Album
 album =
     decode Album
-        |> required "uri" string
-        |> required "name" string
-        |> required "artists" (list artist)
-        |> required "numTracks" (nullable int)
-        |> required "numDiscs" (nullable int)
-        |> required "date" string
-        |> required "musicbrainzID" string
-        |> required "images" (list string)
+        |> optional "uri" string ""
+        |> optional "name" string "Unknown Album"
+        |> optional "artists" (list artist) [ unknownArtist ]
+        |> optional "numTracks" (nullable int) Nothing
+        |> optional "numDiscs" (nullable int) Nothing
+        |> optional "date" (nullable string) Nothing
+        |> optional "musicbrainz_id" (nullable string) Nothing
+        |> optional "images" (nullable (list string)) Nothing
 
 
 {-| Type model for Mopidy Artist.
@@ -315,10 +328,19 @@ album =
 > musicBrainzId - The MusicBrainz ID of the artist.
 -}
 type alias Artist =
-    { uri : String
+    { uri : Maybe String
     , name : String
-    , sortName : String
-    , musicbrainzID : String
+    , sortName : Maybe String
+    , musicbrainzID : Maybe String
+    }
+
+
+unknownArtist : Artist
+unknownArtist =
+    { uri = Nothing
+    , name = "Unknown Artist"
+    , sortName = Nothing
+    , musicbrainzID = Nothing
     }
 
 
@@ -327,10 +349,10 @@ type alias Artist =
 artist : Decoder Artist
 artist =
     decode Artist
-        |> required "uri" string
-        |> required "name" string
-        |> required "sortName" string
-        |> required "musicbrainzID" string
+        |> optional "uri" (nullable string) Nothing
+        |> optional "name" string "Unknown Artist"
+        |> optional "sortName" (nullable string) Nothing
+        |> optional "musicbrainzID" (nullable string) Nothing
 
 
 {-| Type model for Mopidy Playlist.
@@ -361,7 +383,7 @@ playlist =
         |> required "uri" string
         |> required "name" string
         |> required "tracks" (list track)
-        |> required "lastModified" (nullable int)
+        |> optional "lastModified" (nullable int) Nothing
 
 
 {-| Type model for Mopidy Image.
@@ -387,8 +409,8 @@ image : Decoder Image
 image =
     decode Image
         |> required "uri" string
-        |> required "width" (nullable int)
-        |> required "height" (nullable int)
+        |> optional "width" (nullable int) Nothing
+        |> optional "height" (nullable int) Nothing
 
 
 {-| Type model for Mopidy tracklist track. Wraps a regular track and its
