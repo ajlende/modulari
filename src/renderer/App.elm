@@ -5,6 +5,7 @@ import Mopidy.CoreEvents exposing (..)
 import Mopidy.Playback exposing (..)
 import Html exposing (..)
 import Html.Attributes as A exposing (class, id, type', placeholder, value)
+import Html.Events exposing (..)
 import Html.App
 import Json.Decode exposing (Value, decodeValue)
 import Debug
@@ -27,6 +28,7 @@ main =
 
 type alias Model =
     { currentSong : Maybe Track
+    , volumeSliderVisible : Bool
     , volume : Int
     }
 
@@ -34,6 +36,7 @@ type alias Model =
 init : Model
 init =
     { currentSong = Nothing
+    , volumeSliderVisible = False
     , volume = 0
     }
 
@@ -47,6 +50,11 @@ type Msg
     | CoreEventMsg MopidyCoreEvent
     | CoreEventVal Value
     | MsgForPlayback PlaybackMsg
+    | MsgForUI UIMsg
+
+
+type UIMsg
+    = ToggleVolumeSlider
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -63,6 +71,16 @@ update msg model =
 
         CoreEventMsg msg ->
             updateCoreEvent msg model
+
+        MsgForUI msg ->
+            updateUI msg model
+
+
+updateUI : UIMsg -> Model -> ( Model, Cmd Msg )
+updateUI msg model =
+    case msg of
+        ToggleVolumeSlider ->
+            Debug.log (toString model.volumeSliderVisible) ( { model | volumeSliderVisible = (not model.volumeSliderVisible) }, Cmd.none )
 
 
 updatePlayback : PlaybackMsg -> Model -> ( Model, Cmd Msg )
@@ -189,6 +207,18 @@ view model =
                 "fa-volume-down"
             else
                 "fa-volume-off"
+
+        volToggle =
+            if model.volumeSliderVisible then
+                "block"
+            else
+                "hide"
+
+        volIconColor =
+            if model.volumeSliderVisible then
+                "text-color-info"
+            else
+                ""
     in
         div [ class "wrapper" ]
             [ header [ class "navbar" ]
@@ -200,26 +230,26 @@ view model =
                             ]
                         ]
                     , div [ class "controls" ]
-                        [ button [ class "btn btn-link btn-sm", id "previous" ]
+                        [ button [ class "btn btn-link btn-sm", id "previous", onClick (MsgForPlayback Previous) ]
                             [ i [ class "icon fa fa-fw fa-backward" ]
                                 []
                             ]
-                        , button [ class "btn btn-link btn-sm", id "play-pause" ]
+                        , button [ class "btn btn-link btn-sm", id "play-pause", onClick (MsgForPlayback (Play Nothing)) ]
                             [ i [ class "icon fa fa-fw fa-play" ]
                                 []
                             ]
-                        , button [ class "btn btn-link btn-sm", id "next" ]
+                        , button [ class "btn btn-link btn-sm", id "next", onClick (MsgForPlayback Next) ]
                             [ i [ class "icon fa fa-fw fa-forward" ]
                                 []
                             ]
                         , div [ class "volume" ]
-                            [ button [ class "btn btn-link btn-sm" ]
-                                [ i [ class ("icon fa fa-fw " ++ volumeIcon) ]
+                            [ button [ class ("btn btn-link btn-sm"), onClick (MsgForUI ToggleVolumeSlider) ]
+                                [ i [ class ("icon fa fa-fw " ++ volumeIcon ++ " " ++ volIconColor) ]
                                     []
                                 ]
                             , span []
-                                [ text "volume" ]
-                            , input [ class "vertical abs block", A.max "100", A.min "0", type' "range", value volume ]
+                                [ text volume ]
+                            , input [ class ("vertical abs " ++ volToggle), A.max "100", A.min "0", type' "range", value volume ]
                                 []
                             ]
                         ]
