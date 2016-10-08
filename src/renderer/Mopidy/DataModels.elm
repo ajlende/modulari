@@ -43,7 +43,7 @@ For each of the types below, use
     decodeString
         artist
         """
-        { "name": "Coldplay", "musicbrainzID": "cc197bad-dc9c-440d-a5b5-d52ba2e14234" }
+        { "name": "Coldplay", "musicbrainz_id": "cc197bad-dc9c-440d-a5b5-d52ba2e14234" }
         """
 
 Which should become
@@ -253,7 +253,7 @@ track =
         |> optional "duration" (nullable int) Nothing
         |> optional "bitrate" (nullable int) Nothing
         |> optional "comment" (nullable string) Nothing
-        |> optional "musicbrainzID" (nullable string) Nothing
+        |> optional "musicbrainz_id" (nullable string) Nothing
         |> optional "lastModified" (nullable int) Nothing
 
 
@@ -352,7 +352,7 @@ artist =
         |> optional "uri" (nullable string) Nothing
         |> optional "name" string "Unknown Artist"
         |> optional "sortName" (nullable string) Nothing
-        |> optional "musicbrainzID" (nullable string) Nothing
+        |> optional "musicbrainz_id" (nullable string) Nothing
 
 
 {-| Type model for Mopidy Playlist.
